@@ -15,7 +15,10 @@ const webpackConfig = {
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+    alias: { // will enable -> import { ... } from '@src/components'
+      '@src': path.resolve(__dirname, './src')
+    }
   },
   module: {
     rules: [

@@ -1,22 +1,23 @@
 /**
  * Точка входа в приложение
+ *
+ * В этом файле необходимо сделать две основные вещи:
+ *   - выполнить импорт Store
+ *   - выполнить импорт корневого компонента
  */
 
 /* Подключение библиотек */
 import * as React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-/* Подключение корневого компонента */
-import App from './containers/App';
 /* Подключение Store */
-import configureStore from './store/configureStore';
+import store from '@src/store/';
+/* Подключение корневого компонента */
 
-const store = configureStore({});
 
 render(
   <Provider store={store}>
-    <App />
+    <div>Hello, World</div>
   </Provider>,
   document.getElementById('app')
 );
