@@ -1,3 +1,9 @@
+/**
+ * Reducer указывает, как состояние приложения должно измениться
+ * в ответ на произведенное действие.
+ */
+
+
 import { combineReducers } from 'redux';
 import form from './form';
 import table from './table';

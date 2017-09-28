@@ -11,7 +11,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 /* Подключение Store */
-import store from '@src/store/';
+import store from '@src/store';
 /* Подключение корневого компонента */
 
 

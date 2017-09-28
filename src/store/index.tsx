@@ -11,10 +11,11 @@
  * createStore( () => {}, {} ) - принимает один обязательный аргумент 
  * (функцию reducer) и пару необязательных: начальное состояние и "усилители".
  *
- * Создадим функцию конфигурации Store
+ * Создадим функцию конфигурации Store. Для этого необходимо предварительно:
+ *   - выполнить импорт корневого редьюсера
  */
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore } from 'redux';
 import rootReducer from '../reducers';
 
 
