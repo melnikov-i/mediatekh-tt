@@ -23,7 +23,12 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: 'awesome-typescript-loader'
+      },
+      {
+        test: /\.tsx$/,
         exclude: /node_modules/,
         use: 'awesome-typescript-loader'
       },
