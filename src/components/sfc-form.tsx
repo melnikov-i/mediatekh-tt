@@ -1,12 +1,25 @@
 import * as React from 'react';
 
+import { IFormRow } from '@src/models';
+import SFCFormRow from '@src/components/sfc-form-row.usage';
+
 export interface SFCFormProps {
-  label: string,
+  items: IFormRow[],
 }
 
 export const SFCForm: React.SFC<SFCFormProps> = (props) => {
-  const { label } = props;
+  const { items } = props;
   return (
-    <div>{label}</div>
+    <form className={/*продолжить отсюда*/}>
+      {
+        items.map(( item, index ) => {
+          return (
+            <div key={index}>
+              <SFCFormRow formRow={item} />  
+            </div>
+          );
+        })
+      }
+    </div>
   );
 }

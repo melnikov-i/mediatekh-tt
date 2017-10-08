@@ -1,12 +1,13 @@
 import * as React from 'react';
+import { css } from 'aphrodite';
 
 import SFCForm from '@src/components/sfc-form.usage';
+import { AppStyles as styles } from '@src/styles';
 
 
 export const App = () => {
   return (
-    <div>
-      <p>This is App</p>
+    <div className={css(styles.wrapper)}>
       <SFCForm />
     </div>
   );

@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import { SFCForm } from '@src/components';
+import { FormRow } from '@src/models';
 
 export default () => (
   <SFCForm 
-    label={'SFCForm-component'}
+    items={FormRow}
   />
 );
