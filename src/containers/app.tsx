@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { css } from 'aphrodite';
+import { css } from 'aphrodite/no-important';
 
 import SFCForm from '@src/components/sfc-form.usage';
-import { AppStyles as styles } from '@src/styles';
+import styles from '@src/styles/app-styles';
 
 
 export const App = () => {

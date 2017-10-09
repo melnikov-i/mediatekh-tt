@@ -7,7 +7,6 @@ import {
   App,
 } from './containers';
 
-
 const Root: JSX.Element = (
   <Provider store={store}>
     <App />
