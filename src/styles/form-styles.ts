@@ -1,26 +1,20 @@
 import { StyleSheet } from 'aphrodite/no-important';
 
-import SelectorMaker from '@src/styles/template-maker';
+import SelectorDecorator from '@src/styles/template-maker';
 
-// const test = new SelectorMaker({height: '100px'});
-// console.log(test.generate([
-//   ['width', '200px']
-// ]));
-
-const formWrapperTemplate = new SelectorMaker({
+const wrapperTemplate = {
   width: '100%',
   height: 30,
   lineHeight: '30px',
-  marginBottom: 0,
-});
+}
 
 const styles = StyleSheet.create({
-  from__button: {
+  form__button: {
     display: 'block',
     width: 200,
     height: 30,
     lineHeight: '30px',
-    fontSize: 18,
+    fontSize: '18px',
     color: '#fff',
     backgroundColor: 'green',
     textAlign: 'center',
@@ -30,8 +24,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent',
     },
   },
-  form__buttonWrapper: formWrapperTemplate.generate(),
-  form__row: formWrapperTemplate.generate([['marginBottom', 10]]),
+  form__buttonWrapper: SelectorDecorator(wrapperTemplate, {marginBottom: 0}),
+  form__row: SelectorDecorator(wrapperTemplate, {marginBottom: 0}),
 });
 
 export default styles; 

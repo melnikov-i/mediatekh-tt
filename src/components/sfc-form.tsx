@@ -15,15 +15,11 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
     <form>
       {
         items.map(( item, index ) => {
-          return (
-            <div key={index} className={css(styles.form__row)}>
-              <SFCFormRow formRow={item} />  
-            </div>
-          );
+          return ( <SFCFormRow key={index} formRow={item} /> );
         })
       }
       <div className={css(styles.form__buttonWrapper)}>
-        <a href="javascript:void();" className={css(styles.form__button)}>Добавить</a>
+        <a href="" className={css(styles.form__button)}>Добавить</a>
       </div>
     </form>
   );
