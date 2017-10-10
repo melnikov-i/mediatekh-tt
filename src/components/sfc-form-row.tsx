@@ -1,50 +1,35 @@
 import * as React from 'react';
-
-import { IFormRow } from '@src/models';
 import { css } from 'aphrodite/no-important';
+
+import SFCFormRowLabel from '@src/components/sfc-form-row-label.usage';
+import SFCFormRowInput from '@src/components/sfc-form-row-input.usage';
 import styles from '@src/styles/form-row-styles';
+import {
+  IFormRow,
+  ILabelOptions,
+  IInputOptions,
+} from '@src/models';
 
 export interface SFCFormRowProps {
   items: IFormRow
 }
 
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  let middle: JSX.Element;
-
   const { htmlId, label, type, hint } = props.items;
+  const labelOptions: ILabelOptions = { htmlId, label };
+  const inputOptions: IInputOptions = { htmlId, type };
   
-  const text: JSX.Element = (
-    <input
-      type={type}
-      className={css(styles.form__input)}
-      name={htmlId}
-      id={htmlId}
-    />
-  );
-
-
-
-  const select: JSX.Element = (
-    <select
-      className={css(styles.form__select)}
-      id={htmlId}>
-    
-      </select>
-  );
-
-  switch ( type ) {
-    case 'select': middle = select; break;
-    default: middle = text;
+  const middle = ( type ): JSX.Element => {
+    switch ( type ) {
+      case 'select': return (<div>select</div>);
+      default: return <SFCFormRowInput options={inputOptions} />;
+    }
   }
 
   return (
     <div className={css(styles.form__row)}>
-      <label
-        htmlFor={htmlId}
-        className={css(styles.form__label)}>
-          {label}
-      </label>
-      { middle }
+      <SFCFormRowLabel options={labelOptions} />      
+      { middle(type) }
       <span className="form__hint">{hint}</span>
     </div>
   );

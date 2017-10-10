@@ -1,23 +1,11 @@
 import { StyleSheet } from 'aphrodite/no-important';
 
-// import SelectorDecorator from '@src/styles/template-maker';
-
 const styles = StyleSheet.create({
-  form__label: {
-    display: 'inline-block',
-    verticalAlign: 'top',
-    width: '100px',
-    fontSize: '14px',
+  form__row: {
+    width: '100%',
     height: '30px',
     lineHeight: '30px',
-  },
-  form__input: {
-    boxSizing: 'border-box',
-    width: '200px',
-    height: '30px',
-    fontSize: '16px',
-    padding: '0 2px',
-    border: '#ccc 1px solid',
+    marginBottom: '10px',
   },
   form__input_green: {
     border: 'green 1px solid',

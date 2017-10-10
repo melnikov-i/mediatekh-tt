@@ -4,7 +4,17 @@ export interface IFormRow {
   label: string,
   type: string,
   hint: string,
-} 
+}
+
+export interface ILabelOptions {
+  htmlId: string,
+  label: string,
+}
+
+export interface IInputOptions {
+  htmlId: string,
+  type: string,
+}
 
 export const FormRow: IFormRow[] = [
   {

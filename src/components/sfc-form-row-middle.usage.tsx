@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { ISelectOptions } from '@src/models';
-import { SFCFormRowMiddle } from '@src/components';
+import {
+  IInputOptions,
+} from '@src/models';
+import { SFCFormRowMiddleSelect } from '@src/components';
 
-export default ({options}: {options: ISelectOptions}) => (
-  <SFCFormRowMiddle options={options} />
+export default ({options}: {options: IInputOptions}) => (
+  <SFCFormRowMiddleSelect options={options} />
 );
-
-// продолжить тут
