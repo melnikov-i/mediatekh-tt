@@ -6,12 +6,7 @@ export interface IFormRow {
   hint: string,
 }
 
-export interface ILabelOptions {
-  htmlId: string,
-  label: string,
-}
-
-export interface IInputOptions {
+export interface IFieldOptions {
   htmlId: string,
   type: string,
 }

@@ -7,6 +7,14 @@ const styles = StyleSheet.create({
     lineHeight: '30px',
     marginBottom: '10px',
   },
+  form__label: {
+    display: 'inline-block',
+    verticalAlign: 'top',
+    width: '100px',
+    fontSize: '14px',
+    height: '30px',
+    lineHeight: '30px',
+  },
   form__input_green: {
     border: 'green 1px solid',
   },

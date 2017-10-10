@@ -3,7 +3,12 @@ export interface ISelectOptions {
   label: string,
 }
 
-export const Options: { RoleOptions: ISelectOptions[], ActiveOptions: ISelectOptions[] } = {
+export interface IOptions {
+  RoleOptions: ISelectOptions[],
+  ActiveOptions: ISelectOptions[],
+}
+
+export const Options: IOptions = {
   RoleOptions: [
     {
       value: '0',
