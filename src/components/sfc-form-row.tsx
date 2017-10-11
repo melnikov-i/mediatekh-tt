@@ -20,11 +20,13 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   return (
     <div className={css(styles.form__row)}>
+      {/* Метка поля */}
       <label
         htmlFor={htmlId}
         className={css(styles.form__label)}>
           {label}
       </label>
+      {/* Элемент формы */}
       <SFCFormRowField options={fieldOptions} />
     </div>
   );

@@ -6,4 +6,3 @@ import { SFCFormRowField } from '@src/components';
 export default ({ options }: { options: IFieldOptions }) => (
   <SFCFormRowField options={options} />
 );
- 

@@ -21,13 +21,6 @@ const styles = StyleSheet.create({
   form__input_red: {
     border: 'red 1px solid',
   },
-  form__select: {
-    fontSize: '16px',
-    height: '30px',
-  },
-  form__option: {
-    fontSize: '16px',
-  },
   form__hint: {
     fontSize: '10px',
     fontStyle: 'italic',

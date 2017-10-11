@@ -29,11 +29,7 @@ export const SFCFormRowMiddleSelect: React.SFC<SFCFormRowMiddleSelectProps> = (p
   // );
 
   // const select: JSX.Element = (
-  //   <select
-  //     className={css(styles.form__select)}
-  //     id={htmlId}>
     
-  //     </select>
   // );
 
   // switch ( type ) {
