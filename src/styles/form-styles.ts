@@ -1,7 +1,7 @@
 import { StyleSheet } from 'aphrodite/no-important';
 
 const styles = StyleSheet.create({
-  form__button: {
+  formButton: {
     display: 'block',
     width: '200px',
     height: '30px',
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent',
     },
   },
-  form__buttonWrapper: {
+  formButtonWrapper: {
     width: '100%',
     height: '30px',
     lineHeight: '30px',

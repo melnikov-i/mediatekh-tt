@@ -25,12 +25,12 @@ export const SFCFormRowFieldSelect: React.SFC<SFCFormRowFieldSelectProps> = (pro
   const options: ISelectOption[] = getOptions(htmlId);
   return (
     <select
-      className={css(styles.form__select)}
+      className={css(styles.formSelect)}
       id={htmlId}>
       {
         options.map((item, index) => {
           return (
-            <option key={index} className={css(styles.form__option)} value={item.value}>
+            <option key={index} className={css(styles.formOption)} value={item.value}>
               {item.label}
             </option>
           );

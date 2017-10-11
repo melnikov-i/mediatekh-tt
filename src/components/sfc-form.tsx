@@ -20,8 +20,8 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
         })
       }
       {/* Кнопка формы */}
-      <div className={css(styles.form__buttonWrapper)}>
-        <a href="" className={css(styles.form__button)}>Добавить</a>
+      <div className={css(styles.formButtonWrapper)}>
+        <a href="" className={css(styles.formButton)}>Добавить</a>
       </div>
     </form>
   );

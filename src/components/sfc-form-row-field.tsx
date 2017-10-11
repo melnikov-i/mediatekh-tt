@@ -17,7 +17,7 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
       return (
         <input
           type={type}
-          className={css(styles.form__input)}
+          className={css(styles.formInput)}
           name={htmlId}
           id={htmlId}
         />
