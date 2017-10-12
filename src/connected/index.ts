@@ -1,1 +1,1 @@
- 
+export * from './sfc-form-connected';

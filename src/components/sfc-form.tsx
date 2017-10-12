@@ -7,6 +7,7 @@ import styles from '@src/styles/form-styles';
 
 export interface SFCFormProps {
   items: IFormRow[],
+  test: string,
 }
 
 export const SFCForm: React.SFC<SFCFormProps> = (props) => {
