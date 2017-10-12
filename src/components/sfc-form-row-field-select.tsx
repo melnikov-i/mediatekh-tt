@@ -1,32 +1,23 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
-import {
-  ISelectFieldId,
-  ISelectOption,
-  RoleOptions,
-  ActiveOptions,
-} from '@src/models';
+import { ISelectProperties } from '@src/models';
 import styles from '@src/styles/form-row-field-select-styles';
 
 export interface SFCFormRowFieldSelectProps {
-  id: ISelectFieldId,
+  properties: ISelectProperties,
 }
 
 export const SFCFormRowFieldSelect: React.SFC<SFCFormRowFieldSelectProps> = (props) => {
-  const { htmlId } = props.id;
-  const getOptions = (id: string): ISelectOption[] => {
-    switch ( id ) {
-      case 'active': return ActiveOptions;
-      case 'role': return RoleOptions;
-      default: return [];
-    }
-  };
-  const options: ISelectOption[] = getOptions(htmlId);
+  const { options, htmlId } = props.properties;
+  const selectHandler = (e) => {
+    console.log(e);
+  }
   return (
     <select
       className={css(styles.formSelect)}
-      id={htmlId}>
+      id={htmlId}
+      onBlur={selectHandler}>
       {
         options.map((item, index) => {
           return (

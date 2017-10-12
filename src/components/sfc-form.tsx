@@ -11,6 +11,10 @@ export interface SFCFormProps {
 
 export const SFCForm: React.SFC<SFCFormProps> = (props) => {
   const { items } = props;
+  const formButtonHandler = (e) => {
+    console.log(new Date());
+    e.preventDefault();
+  }
   return (
     <form>
       {/* Поля формы */}
@@ -21,7 +25,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
       }
       {/* Кнопка формы */}
       <div className={css(styles.formButtonWrapper)}>
-        <a href="" className={css(styles.formButton)}>Добавить</a>
+        <a href="" className={css(styles.formButton)} onClick={formButtonHandler}>Добавить</a>
       </div>
     </form>
   );

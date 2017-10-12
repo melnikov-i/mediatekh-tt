@@ -7,6 +7,11 @@ export interface ISelectFieldId {
   htmlId: string,
 }
 
+export interface ISelectProperties {
+  options: ISelectOption[],
+  htmlId: string,
+}
+
 export const RoleOptions: ISelectOption[] = [
   {
     value: '0',
