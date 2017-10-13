@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { StatefulFormConnected } from '@src/connected';
-import { FormRow } from '@src/models';
+import { FormRowsCollection } from '@src/collections';
 
 export default () => (
   <StatefulFormConnected 
-    initialFormRowsCollection={FormRow}
+    initialFormRowsCollection={FormRowsCollection}
   />
 );

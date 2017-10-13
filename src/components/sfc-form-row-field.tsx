@@ -10,7 +10,9 @@ import {
 } from '@src/models';
 import styles from '@src/styles/form-row-field-styles';
 import errors from '@src/styles/error-styles';
-import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usage';
+import 
+  SFCFormRowFieldSelectConnected 
+from '@src/connected/sfc-form-row-field-select-connected.usage';
 
 export interface SFCFormRowFieldProps {
   options: IFieldOptions,
@@ -18,7 +20,12 @@ export interface SFCFormRowFieldProps {
 
 export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
   const { htmlId, type } = props.options;
-  const error: JSX.Element = (<span className={css(errors.errorMessage)}>Нет информации о поле</span>);
+  const error: JSX.Element = (
+    <span className={css(errors.errorMessage)}>
+      Нет информации о поле
+    </span>
+  );
+  
   switch ( type ) {
     case 'text':
       /* Поле ввода информации */
@@ -43,7 +50,7 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
       if ( options.length != 0 ) {
         const properties: ISelectProperties = { options, htmlId, }
         return (
-          <SFCFormRowFieldSelect properties={properties} />
+          <SFCFormRowFieldSelectConnected properties={properties} />
         );  
       } else {
         return error;

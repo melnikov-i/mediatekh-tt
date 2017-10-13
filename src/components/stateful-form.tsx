@@ -2,7 +2,8 @@ import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
 import { IFormRow } from '@src/models';
-import SFCFormRow from '@src/components/sfc-form-row.usage';
+// import SFCFormRow from '@src/components/sfc-form-row.usage';
+import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';
 
@@ -31,7 +32,8 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     };
     
     componentWillReceiveProps({ initialFormRowsCollection }: PropsWithDefaults) {
-      if ( initialFormRowsCollection != null && initialFormRowsCollection !== this.props.initialFormRowsCollection ) {
+      if ( initialFormRowsCollection != null 
+           && initialFormRowsCollection !== this.props.initialFormRowsCollection ) {
         this.setState({ formRowsCollection: initialFormRowsCollection });
       }
     }
@@ -44,13 +46,13 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     render() {
       const { formButtonHandler } = this;
       const { formRowsCollection } = this.state;
-      if ( formButtonHandler.length != 0 ) {
+      if ( formRowsCollection.length != 0 ) {
         return (
           <form action="">
             {/* Поля формы */}
             {
               formRowsCollection.map((item, index) => {
-                return <SFCFormRow key={index} formRow={item} />
+                return <SFCFormRowConnected key={index} formRow={item} />
               })
             }
             {/* Кнопка формы */}
@@ -60,7 +62,11 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
           </form>
         );  
       } else {
-        return <span className={css(errors.errorMessage)}>Ошибка! Не удалось получить поля формы.</span>
+        return (
+          <span className={css(errors.errorMessage)}>
+            Ошибка! Не удалось получить поля формы.
+          </span>
+        );
       }
       
     }

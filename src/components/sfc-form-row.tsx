@@ -6,7 +6,8 @@ import {
   IFieldOptions 
 } from '@src/models';
 import styles from '@src/styles/form-row-styles';
-import SFCFormRowField from '@src/components/sfc-form-row-field.usage';
+// import SFCFormRowField from '@src/components/sfc-form-row-field.usage';
+import SFCFormRowFieldConnected from '@src/connected/sfc-form-row-field-connected.usage';
 
 export interface SFCFormRowProps {
   items: IFormRow,
@@ -27,7 +28,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
           {label}
       </label>
       {/* Элемент формы */}
-      <SFCFormRowField options={fieldOptions} />
+      <SFCFormRowFieldConnected options={fieldOptions} />
     </div>
   );
 };
