@@ -1,1 +1,1 @@
-export * from './sfc-form-connected';
+export * from './stateful-form-connected';
