@@ -6,7 +6,7 @@ import { RootState } from '@src/redux'; // Dispatch !!!
 import { SFCFormRowField } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
-  // formRowsCollection: state.form.formRowsCollection,
+  isHintActive: state.form.isHintActive,
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

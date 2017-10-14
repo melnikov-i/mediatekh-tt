@@ -16,18 +16,25 @@ import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usa
 
 export interface SFCFormRowFieldProps {
   options: IFieldOptionsModel,
+  isHintActive: boolean,
 }
 
 export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
   const { htmlId, type, regExpTemplate, hint } = props.options;
+  const { isHintActive } = props;
   const error: JSX.Element = (
     <span className={css(errors.errorMessage)}>
       Нет информации о поле
     </span>
   );
-  let isHintActive: boolean = false;
   let customStyle = styles.formInputDefault;
+  
+  let showHintMessage: JSX.Element | null = null;
   const hintMessage: JSX.Element = (<span className={css(styles.formHint)}>{hint}</span>);
+
+  if ( isHintActive ) {
+    showHintMessage = hintMessage;
+  }
   
   console.log(regExpTemplate, hint); // не забудь это удалить
 
@@ -36,6 +43,7 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
     // проверить содержимое элемента с шаблоном регулярного выражения
     if ( regExpTemplate.test(e.target.value) ) {
       customStyle = styles.formInputGreen;
+      // isHintActive = true;
     } else {
       customStyle = styles.formInputRed;
     }
@@ -64,7 +72,7 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
             id={htmlId}
             onBlur={fieldHandler}
           />
-          { (isHintActive) ? hintMessage : null }
+          { showHintMessage }
         </span>
       );
     case 'select':
