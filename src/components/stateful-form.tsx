@@ -2,7 +2,6 @@ import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
 import { IFormRow } from '@src/models';
-// import SFCFormRow from '@src/components/sfc-form-row.usage';
 import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';

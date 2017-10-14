@@ -3,16 +3,16 @@ import { css } from 'aphrodite/no-important';
 
 import {
   IFieldOptions,
-  ISelectOption,
+  ISelectModel,
   ISelectProperties,
-  RoleOptions,
-  ActiveOptions,
 } from '@src/models';
+import {
+  SelectActiveCollection,
+  SelectRoleCollection,
+} from '@src/collections';
 import styles from '@src/styles/form-row-field-styles';
 import errors from '@src/styles/error-styles';
-import 
-  SFCFormRowFieldSelectConnected 
-from '@src/connected/sfc-form-row-field-select-connected.usage';
+import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usage';
 
 export interface SFCFormRowFieldProps {
   options: IFieldOptions,
@@ -25,6 +25,10 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
       Нет информации о поле
     </span>
   );
+
+  const fieldHandler = (e) => {
+    console.log(e);
+  }
   
   switch ( type ) {
     case 'text':
@@ -35,14 +39,15 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
           className={css(styles.formInput)}
           name={htmlId}
           id={htmlId}
+          onBlur={fieldHandler}
         />
       );
     case 'select':
       /* Поле выбора значения из списка */
-      const getOptions = (id: string): ISelectOption[] => {
+      const getOptions = (id: string): ISelectModel[] => {
         switch ( id ) {
-          case 'active': return ActiveOptions;
-          case 'role': return RoleOptions;
+          case 'active': return SelectActiveCollection;
+          case 'role': return SelectRoleCollection;
           default: return [];
         }
       };
@@ -50,7 +55,7 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
       if ( options.length != 0 ) {
         const properties: ISelectProperties = { options, htmlId, }
         return (
-          <SFCFormRowFieldSelectConnected properties={properties} />
+          <SFCFormRowFieldSelect properties={properties} />
         );  
       } else {
         return error;

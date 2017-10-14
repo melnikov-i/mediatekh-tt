@@ -60,7 +60,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4598110dcc4ae5a068f4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e8a69181f32ed692ebc8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -28379,49 +28379,42 @@ exports.FormRowsCollection = [
         htmlId: 'first_name',
         label: 'Имя',
         type: 'text',
-        regExpTemplate: /^.{3,15}$/,
         hint: 'от 3 до 15 символов'
     }, {
         id: 1,
         htmlId: 'last_name',
         label: 'Фамилия',
         type: 'text',
-        regExpTemplate: /^.{3,25}$/,
         hint: 'от 3 до 25 символов'
     }, {
         id: 2,
         htmlId: 'active',
         label: 'Активен',
         type: 'select',
-        regExpTemplate: /^[01]{1}$/,
         hint: ''
     }, {
         id: 3,
         htmlId: 'age',
         label: 'Возраст',
         type: 'text',
-        regExpTemplate: /^(5[0-5]|[2-4][0-9]|1[89])$/,
         hint: 'от 18 до 55 лет'
     }, {
         id: 4,
         htmlId: 'login',
         label: 'Логин',
         type: 'text',
-        regExpTemplate: /^[a-z0-9_-]+$/,
         hint: 'a-z, 0-9, \'_\' и \'*\''
     }, {
         id: 5,
         htmlId: 'password',
         label: 'Пароль',
         type: 'text',
-        regExpTemplate: /^.{8,}$/,
         hint: 'Минимум 8 символов'
     }, {
         id: 6,
         htmlId: 'role',
         label: 'Роль',
         type: 'select',
-        regExpTemplate: /^[1-4]{1}$/,
         hint: 'Выберите'
     }
 ];
@@ -28437,49 +28430,6 @@ exports.FormRowsCollection = [
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
 tslib_1.__exportStar(__webpack_require__("./src/collections/from-rows-collection.ts"), exports);
-tslib_1.__exportStar(__webpack_require__("./src/collections/select-collection.ts"), exports);
-
-
-/***/ }),
-
-/***/ "./src/collections/select-collection.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SelectRoleCollection = [
-    {
-        value: '0',
-        label: 'Choose',
-    },
-    {
-        value: '1',
-        label: 'Administrator',
-    },
-    {
-        value: '2',
-        label: 'Technician',
-    },
-    {
-        value: '3',
-        label: 'Manager',
-    },
-    {
-        value: '4',
-        label: 'Supervisor',
-    }
-];
-exports.SelectActiveCollection = [
-    {
-        value: '1',
-        label: 'Yes',
-    },
-    {
-        value: '0',
-        label: 'No',
-    }
-];
 
 
 /***/ }),
@@ -28522,22 +28472,6 @@ exports.SFCFormRowFieldSelect = function (props) {
 
 /***/ }),
 
-/***/ "./src/components/sfc-form-row-field-select.usage.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__("./node_modules/react/react.js");
-var components_1 = __webpack_require__("./src/components/index.ts");
-exports.default = function (_a) {
-    var properties = _a.properties;
-    return (React.createElement(components_1.SFCFormRowFieldSelect, { properties: properties }));
-};
-
-
-/***/ }),
-
 /***/ "./src/components/sfc-form-row-field.tsx":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28546,31 +28480,28 @@ exports.default = function (_a) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var collections_1 = __webpack_require__("./src/collections/index.ts");
+var models_1 = __webpack_require__("./src/models/index.ts");
 var form_row_field_styles_1 = __webpack_require__("./src/styles/form-row-field-styles.ts");
 var error_styles_1 = __webpack_require__("./src/styles/error-styles.ts");
-var sfc_form_row_field_select_usage_1 = __webpack_require__("./src/components/sfc-form-row-field-select.usage.tsx");
+var sfc_form_row_field_select_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-row-field-select-connected.usage.tsx");
 exports.SFCFormRowField = function (props) {
     var _a = props.options, htmlId = _a.htmlId, type = _a.type;
     var error = (React.createElement("span", { className: no_important_1.css(error_styles_1.default.errorMessage) }, "\u041D\u0435\u0442 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 \u043E \u043F\u043E\u043B\u0435"));
-    var fieldHandler = function (e) {
-        console.log(e);
-    };
     switch (type) {
         case 'text':
-            return (React.createElement("input", { type: type, className: no_important_1.css(form_row_field_styles_1.default.formInput), name: htmlId, id: htmlId, onBlur: fieldHandler }));
+            return (React.createElement("input", { type: type, className: no_important_1.css(form_row_field_styles_1.default.formInput), name: htmlId, id: htmlId }));
         case 'select':
             var getOptions = function (id) {
                 switch (id) {
-                    case 'active': return collections_1.SelectActiveCollection;
-                    case 'role': return collections_1.SelectRoleCollection;
+                    case 'active': return models_1.ActiveOptions;
+                    case 'role': return models_1.RoleOptions;
                     default: return [];
                 }
             };
             var options = getOptions(htmlId);
             if (options.length != 0) {
                 var properties = { options: options, htmlId: htmlId, };
-                return (React.createElement(sfc_form_row_field_select_usage_1.default, { properties: properties }));
+                return (React.createElement(sfc_form_row_field_select_connected_usage_1.default, { properties: properties }));
             }
             else {
                 return error;
@@ -28593,10 +28524,9 @@ var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.
 var form_row_styles_1 = __webpack_require__("./src/styles/form-row-styles.ts");
 var sfc_form_row_field_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-row-field-connected.usage.tsx");
 exports.SFCFormRow = function (props) {
-    var _a = props.items, htmlId = _a.htmlId, label = _a.label, type = _a.type, regExpTemplate = _a.regExpTemplate, hint = _a.hint;
+    var _a = props.items, htmlId = _a.htmlId, label = _a.label, type = _a.type, hint = _a.hint;
     var fieldOptions = { htmlId: htmlId, type: type };
     console.log(hint);
-    console.log(regExpTemplate);
     return (React.createElement("div", { className: no_important_1.css(form_row_styles_1.default.formRow) },
         React.createElement("label", { htmlFor: htmlId, className: no_important_1.css(form_row_styles_1.default.formLabel) }, label),
         React.createElement(sfc_form_row_field_connected_usage_1.default, { options: fieldOptions })));
@@ -28714,6 +28644,7 @@ var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
 tslib_1.__exportStar(__webpack_require__("./src/connected/stateful-form-connected.tsx"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-connected.tsx"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-field-connected.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-field-select-connected.tsx"), exports);
 
 
 /***/ }),
@@ -28773,6 +28704,36 @@ var connected_1 = __webpack_require__("./src/connected/index.ts");
 exports.default = function (_a) {
     var options = _a.options;
     return (React.createElement(connected_1.SFCFormRowFieldConnected, { options: options }));
+};
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-form-row-field-select-connected.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var components_1 = __webpack_require__("./src/components/index.ts");
+var mapStateToProps = function (state) { return ({}); };
+exports.SFCFormRowFieldSelectConnected = react_redux_1.connect(mapStateToProps, {})(components_1.SFCFormRowFieldSelect);
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-form-row-field-select-connected.usage.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var connected_1 = __webpack_require__("./src/connected/index.ts");
+exports.default = function (_a) {
+    var properties = _a.properties;
+    return (React.createElement(connected_1.SFCFormRowFieldSelectConnected, { properties: properties }));
 };
 
 
@@ -28863,7 +28824,50 @@ react_dom_1.render(Root, document.getElementById('app'));
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+tslib_1.__exportStar(__webpack_require__("./src/models/select-options-model.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/models/table-head-model.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/models/select-options-model.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RoleOptions = [
+    {
+        value: '0',
+        label: 'Choose',
+    },
+    {
+        value: '1',
+        label: 'Administrator',
+    },
+    {
+        value: '2',
+        label: 'Technician',
+    },
+    {
+        value: '3',
+        label: 'Manager',
+    },
+    {
+        value: '4',
+        label: 'Supervisor',
+    }
+];
+exports.ActiveOptions = [
+    {
+        value: '1',
+        label: 'Yes',
+    },
+    {
+        value: '0',
+        label: 'No',
+    }
+];
 
 
 /***/ }),

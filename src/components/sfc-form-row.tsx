@@ -14,10 +14,11 @@ export interface SFCFormRowProps {
 }
 
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  const { htmlId, label, type, hint } = props.items;
+  const { htmlId, label, type, regExpTemplate, hint } = props.items;
   const fieldOptions: IFieldOptions = { htmlId, type };
   // удали нижнюю строку!!!
   console.log(hint);
+  console.log(regExpTemplate);
 
   return (
     <div className={css(styles.formRow)}>

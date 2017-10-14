@@ -3,6 +3,7 @@ export interface IFormRow {
   htmlId: string,
   label: string,
   type: string,
+  regExpTemplate: RegExp,
   hint: string,
 }
 
