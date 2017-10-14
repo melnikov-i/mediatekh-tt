@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { IFormRow } from '@src/models';
+import { IFormRowModel } from '@src/models';
 
 
 // import {
@@ -9,7 +9,7 @@ import { IFormRow } from '@src/models';
 // } from './';
 
 export type State = {
-  readonly formRowsCollection: IFormRow[],
+  readonly formRowsCollection: IFormRowModel[],
 }
 
 export const reducer = combineReducers<State>({

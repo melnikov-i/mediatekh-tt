@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { IFieldOptions } from '@src/models';
+import { IFieldOptionsModel } from '@src/models';
 import { SFCFormRowFieldConnected } from '@src/connected';
 
-export default ({ options }: { options: IFieldOptions }) => (
+export default ({ options }: { options: IFieldOptionsModel }) => (
   <SFCFormRowFieldConnected options={options} />
 );

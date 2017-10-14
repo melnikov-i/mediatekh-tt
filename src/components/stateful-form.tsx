@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
-import { IFormRow } from '@src/models';
+import { IFormRowModel } from '@src/models';
 import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';
 
 export interface StatefulFormProps {
-  initialFormRowsCollection?: IFormRow[],
+  initialFormRowsCollection?: IFormRowModel[],
 }
 
 interface DefaultProps {
-  initialFormRowsCollection: IFormRow[],
+  initialFormRowsCollection: IFormRowModel[],
 }
 
 type PropsWithDefaults = StatefulFormProps & DefaultProps;
 
 interface State {
-  formRowsCollection: IFormRow[],
+  formRowsCollection: IFormRowModel[],
 }
 
 export const StatefulForm: React.ComponentClass<StatefulFormProps> =

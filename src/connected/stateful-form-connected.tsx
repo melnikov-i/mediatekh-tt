@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { RootState } from '@src/redux'; // Dispatch !!!
 // import { actionCreators } from '@src/redux/form';
 import { StatefulForm } from '@src/components';
-import { IFormRow } from '@src/models';
+import { IFormRowModel } from '@src/models';
 
 export interface StatefulFormConnected {
-  initialFormRowsCollection: IFormRow[],
+  initialFormRowsCollection: IFormRowModel[],
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulFormConnected) => ({

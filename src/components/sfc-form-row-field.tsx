@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
 import {
-  IFieldOptions,
+  IFieldOptionsModel,
   ISelectModel,
   ISelectProperties,
 } from '@src/models';
@@ -15,7 +15,7 @@ import errors from '@src/styles/error-styles';
 import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usage';
 
 export interface SFCFormRowFieldProps {
-  options: IFieldOptions,
+  options: IFieldOptionsModel,
 }
 
 export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
@@ -27,6 +27,10 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
   );
 
   const fieldHandler = (e) => {
+    /* захватить элемент, 
+       проверить содержимое с шаблоном регулярного выражения, 
+       изменить цвет рамки,
+       передать в стейт */
     console.log(e);
   }
   

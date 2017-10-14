@@ -2,23 +2,19 @@ import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
 import { 
-  IFormRow, 
-  IFieldOptions 
+  IFormRowModel, 
+  IFieldOptionsModel 
 } from '@src/models';
 import styles from '@src/styles/form-row-styles';
-// import SFCFormRowField from '@src/components/sfc-form-row-field.usage';
 import SFCFormRowFieldConnected from '@src/connected/sfc-form-row-field-connected.usage';
 
 export interface SFCFormRowProps {
-  items: IFormRow,
+  items: IFormRowModel,
 }
 
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   const { htmlId, label, type, regExpTemplate, hint } = props.items;
-  const fieldOptions: IFieldOptions = { htmlId, type };
-  // удали нижнюю строку!!!
-  console.log(hint);
-  console.log(regExpTemplate);
+  const fieldOptions: IFieldOptionsModel = { htmlId, type, regExpTemplate, hint };
 
   return (
     <div className={css(styles.formRow)}>

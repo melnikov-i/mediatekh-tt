@@ -1,4 +1,4 @@
-export interface IFormRow {
+export interface IFormRowModel {
   id: number,
   htmlId: string,
   label: string,
@@ -7,7 +7,9 @@ export interface IFormRow {
   hint: string,
 }
 
-export interface IFieldOptions {
+export interface IFieldOptionsModel {
   htmlId: string,
   type: string,
+  regExpTemplate: RegExp,
+  hint: string,
 }
