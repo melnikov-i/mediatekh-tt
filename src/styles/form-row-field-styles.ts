@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
     height: '30px',
     fontSize: '16px',
     padding: '0 2px',
+  },
+  formInputDefault: {
     border: '#ccc 1px solid',
   },
   formInputGreen: {
@@ -14,6 +16,13 @@ const styles = StyleSheet.create({
   },
   formInputRed: {
     border: 'red 1px solid',
+  },
+  formHint: {
+    fontSize: '10px',
+    fontStyle: 'italic',
+    paddingLeft: '5px',
+    color: 'red',
+    display: 'inline-block',
   },
 });
 
