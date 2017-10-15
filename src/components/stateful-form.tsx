@@ -8,6 +8,7 @@ import errors from '@src/styles/error-styles';
 
 export interface StatefulFormProps {
   initialFormRowsCollection?: IFormRowModel[],
+  hintCollection: string[],
 }
 
 interface DefaultProps {
@@ -38,19 +39,28 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     }
 
     formButtonHandler = (e) => {
-      console.log(new Date());
+      console.log(new Date()); // не забудь убрать эту строку
       e.preventDefault();
     }
 
     render() {
       const { formButtonHandler } = this;
       const { formRowsCollection } = this.state;
+      const { hintCollection } = this.props;
       if ( formRowsCollection.length != 0 ) {
         return (
           <form action="">
             {/* Поля формы */}
             {
               formRowsCollection.map((item, index) => {
+                console.log(hintCollection);
+                if ( hintCollection.length != 0 ) {
+                  hintCollection.forEach((element) => {
+                    if ( element == item.htmlId ) {
+                      item.isHintActive = true;
+                    }
+                  })
+                }
                 return <SFCFormRowConnected key={index} formRow={item} />
               })
             }

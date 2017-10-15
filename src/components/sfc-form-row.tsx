@@ -13,8 +13,10 @@ export interface SFCFormRowProps {
 }
 
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  const { htmlId, label, type, regExpTemplate, hint } = props.items;
-  const fieldOptions: IFieldOptionsModel = { htmlId, type, regExpTemplate, hint };
+  const { htmlId, label, type, regExpTemplate, hint, isHintActive } = props.items;
+  const fieldOptions: IFieldOptionsModel = { 
+    htmlId, type, regExpTemplate, hint, isHintActive 
+  };
 
   return (
     <div className={css(styles.formRow)}>
@@ -29,3 +31,5 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     </div>
   );
 };
+
+/* А должен ли этот компонент обладать mapStateToProps и mapDispatchToProps ??? */

@@ -5,6 +5,7 @@ export interface IFormRowModel {
   type: string,
   regExpTemplate: RegExp,
   hint: string,
+  isHintActive: boolean,
 }
 
 export interface IFieldOptionsModel {
@@ -12,4 +13,5 @@ export interface IFieldOptionsModel {
   type: string,
   regExpTemplate: RegExp,
   hint: string,
+  isHintActive: boolean,
 }

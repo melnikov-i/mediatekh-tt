@@ -1,17 +1,18 @@
 import { combineReducers } from 'redux';
 
-// import {
-//   TEST_TYPE1,
-//   TEST_TYPE2,
-// } from './';
+import {
+  CHANGE_HINT_DISPLAY,
+} from './';
 
 export type State = {
-  readonly isHintActive: boolean,
+  readonly hintCollection: string[],
 }
 
 export const reducer = combineReducers<State>({
-  isHintActive: (state = false, action) => {
+  hintCollection: (state = [], action) => {
     switch ( action.type ) {
+      case CHANGE_HINT_DISPLAY:
+        return [...state, action.payload];
       default:
         return state;
     }

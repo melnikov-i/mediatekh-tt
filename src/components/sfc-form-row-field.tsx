@@ -16,37 +16,37 @@ import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usa
 
 export interface SFCFormRowFieldProps {
   options: IFieldOptionsModel,
-  isHintActive: boolean,
+  changeHintDisplay: (elementName: string) => any,
+  // doShowHint: () => any,
+  // doHideHint: () => any,
 }
 
 export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
-  const { htmlId, type, regExpTemplate, hint } = props.options;
-  const { isHintActive } = props;
+  const { htmlId, type, regExpTemplate, hint, isHintActive } = props.options;
+  const { changeHintDisplay } = props;
+  
+
+
   const error: JSX.Element = (
     <span className={css(errors.errorMessage)}>
       Нет информации о поле
     </span>
   );
-  let customStyle = styles.formInputDefault;
   
-  let showHintMessage: JSX.Element | null = null;
-  const hintMessage: JSX.Element = (<span className={css(styles.formHint)}>{hint}</span>);
+  let customStyle = styles.formInputDefault; // эта строка под вопросом  
 
-  if ( isHintActive ) {
-    showHintMessage = hintMessage;
-  }
-  
   console.log(regExpTemplate, hint); // не забудь это удалить
 
   const fieldHandler = (e) => {
-    console.log(regExpTemplate.test(e.target.value));
-    // проверить содержимое элемента с шаблоном регулярного выражения
-    if ( regExpTemplate.test(e.target.value) ) {
-      customStyle = styles.formInputGreen;
-      // isHintActive = true;
-    } else {
-      customStyle = styles.formInputRed;
+    console.log(e.target.name);
+    if ( !regExpTemplate.test(e.target.value) ) {
+      changeHintDisplay(e.target.name);
+      console.log(changeHintDisplay(e.target.name));
+      // console.log(doShowHint());
+      // doShowHint();
     }
+    // else doHideHint();
+
     // изменить цвет рамки
     // передать в стейт ключ правильности заполнения поля
 
@@ -59,20 +59,30 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
     // console.log(e.target.value);
     // console.log(props.options);
   }
+
+  const showHintMessage = ():JSX.Element | null => {
+    if ( isHintActive ) {
+      return (<span className={css(styles.formHint)}>{hint}</span>);
+    }
+    return null;
+  }
   
   switch ( type ) {
     case 'text':
       /* Поле ввода информации */
+      const field: JSX.Element = (
+        <input
+          type={type}
+          className={css(styles.formInput, customStyle)}
+          name={htmlId}
+          id={htmlId}
+          onBlur={fieldHandler}
+        />
+      );
       return (
         <span>
-          <input
-            type={type}
-            className={css(styles.formInput, customStyle)}
-            name={htmlId}
-            id={htmlId}
-            onBlur={fieldHandler}
-          />
-          { showHintMessage }
+          { field }
+          { showHintMessage() }
         </span>
       );
     case 'select':
@@ -88,7 +98,10 @@ export const SFCFormRowField: React.SFC<SFCFormRowFieldProps> = (props) => {
       if ( options.length != 0 ) {
         const properties: ISelectProperties = { options, htmlId, }
         return (
-          <SFCFormRowFieldSelect properties={properties} />
+          <span>
+            <SFCFormRowFieldSelect properties={properties} />
+            { showHintMessage }
+          </span>
         );  
       } else {
         return error;
