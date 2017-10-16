@@ -10,4 +10,5 @@ export interface ISelectFieldId {
 export interface ISelectProperties {
   options: ISelectModel[],
   htmlId: string,
+  customSelectStyle: any,
 }

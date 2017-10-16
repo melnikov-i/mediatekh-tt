@@ -1,3 +1,4 @@
+/* Модель всех параметров строки формы */
 export interface IFormRowModel {
   id: number,
   htmlId: string,
@@ -6,6 +7,11 @@ export interface IFormRowModel {
   regExpTemplate: RegExp,
   hint: string,
   isHintActive: boolean,
+}
+
+export interface IFilledField {
+  htmlId: string,
+  isCorrect: boolean,
 }
 
 export interface IFieldOptionsModel {

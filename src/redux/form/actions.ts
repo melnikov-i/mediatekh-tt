@@ -1,12 +1,14 @@
-export const CHANGE_HINT_DISPLAY = 'CHANGE_HINT_DISPLAY';
+import { IFilledField } from '@src/models';
+
+export const FILLED_FIELD = 'FILLED_FIELD';
 
 export type Actions = {
-  CHANGE_HINT_DISPLAY: { type: typeof CHANGE_HINT_DISPLAY, payload: string },
+  FILLED_FIELD: { type: typeof FILLED_FIELD, payload: IFilledField },
 };
 
 // Action Creators
 export const actionCreators = {
-  changeHintDisplay: (payload: string): Actions[typeof CHANGE_HINT_DISPLAY] => ({
-    type: CHANGE_HINT_DISPLAY, payload,
+  filledField: ( payload: IFilledField ): Actions[typeof FILLED_FIELD] => ({
+    type: FILLED_FIELD, payload,
   }),
 }

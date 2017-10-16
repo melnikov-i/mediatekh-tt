@@ -15,16 +15,32 @@ const styles = StyleSheet.create({
     height: '30px',
     lineHeight: '30px',
   },
+  formHintVisible: {
+    display: 'inline-block',
+  },
+    formInput: {
+    boxSizing: 'border-box',
+    width: '200px',
+    height: '30px',
+    fontSize: '16px',
+    padding: '0 2px',
+  },
+  formInputDefault: {
+    border: '#ccc 1px solid',
+  },
+  formInputGreen: {
+    border: 'green 1px solid',
+  },
+  formInputRed: {
+    border: 'red 1px solid',
+  },
   formHint: {
     fontSize: '10px',
     fontStyle: 'italic',
     paddingLeft: '5px',
-    display: 'none',
     color: 'red',
-  },
-  formHintVisible: {
     display: 'inline-block',
-  }
+  },
 });
 
 export default styles;  
