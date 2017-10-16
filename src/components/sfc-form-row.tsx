@@ -34,35 +34,25 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   const customStyle = ():any => {
     // Индекс поля коллекции заполненных полей
-    let index: string = 'notEdited';
+    let index: string = '';
     // если индекс поля есть в коллекции, получить этот индекс в переменную
     for ( let i in filledFieldsCollection ) {
       if ( filledFieldsCollection[i].htmlId == htmlId ) index = i;
     }
     // индекс получен или по умолчанию. Выполнение действия над рамкой поля.
-    if ( index !== 'notEdited' ) {
+    if ( index !== '' ) {
       if ( filledFieldsCollection[index].isCorrect ) return styles.formInputGreen;
       else return styles.formInputRed;
     } else return styles.formInputDefault;
   };
 
   const fieldHandler = (e) => {
-    /*
-      {htmlId: 'first_name', isCorrect: true}
-
-      Проверить введенное в поле значение:
-        - Если в поле ничего не ввели, ничего не выполнять
-        - Если введенное в поле значение не соответствует шаблону, добавить имя поля в коллекцию
-          заполненных полей и пометить, как некорректное.
-        - Если введенное в поле значение соответствует шаблону, добавить имя поля в коллекцию
-          заполненных полей и пометить, как корректное.
-     */
     if ( regExpTemplate.test(e.target.value) ) {
-      console.log('correct filling');
       filledField({ htmlId: htmlId, isCorrect: true });
+      console.log('htmlId: ', htmlId);
     } else {
-      console.log('incorrect filling');
       filledField({ htmlId: htmlId, isCorrect: false });
+      console.log('htmlId: ', htmlId);
     }
   }
 
