@@ -5,7 +5,6 @@ import {
   IFormRowModel,
   IFilledField,
   ISelectModel,
-  // ISelectProperties,
 } from '@src/models';
 import {
   SelectActiveCollection,
@@ -28,10 +27,12 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
       Ошибка! Нет информации о поле.
     </span>
   );
+  
   interface ICustomParams {
     borderStyle: {},
     hintContainer: JSX.Element | null,
   }
+  
   const getCustomParams = (): ICustomParams => {
     // Индекс поля коллекции заполненных полей
     let index: string = '';
@@ -64,9 +65,9 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   const fieldHandler = (e) => {
     if ( regExpTemplate.test(e.target.value) ) {
-      filledField({ htmlId: htmlId, isCorrect: true });
+      filledField({ htmlId: htmlId, isCorrect: true, value: e.target.value });
     } else {
-      filledField({ htmlId: htmlId, isCorrect: false });
+      filledField({ htmlId: htmlId, isCorrect: false, value: e.target.value });
     }
   }
 

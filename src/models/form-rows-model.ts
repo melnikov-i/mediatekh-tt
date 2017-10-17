@@ -11,6 +11,7 @@ export interface IFormRowModel {
 export interface IFilledField {
   htmlId: string,
   isCorrect: boolean,
+  value: string,
 }
 
 export interface IFieldOptionsModel {

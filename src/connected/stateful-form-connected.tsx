@@ -11,8 +11,8 @@ export interface StatefulFormConnected {
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulFormConnected) => ({
-  // formRowsCollection: state.form.formRowsCollection,
-  // hintCollection: state.form.hintCollection,
+  userCollection: state.form.userCollection,
+  filledFieldsCollection: state.form.filledFieldsCollection,
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

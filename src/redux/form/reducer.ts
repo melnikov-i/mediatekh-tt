@@ -1,13 +1,14 @@
 import { combineReducers } from 'redux';
 
-import { IFilledField } from '@src/models';
+import { IFilledField, IUser } from '@src/models';
 
 import {
   FILLED_FIELD,
 } from './';
 
 export type State = {
-  readonly filledFieldsCollection: IFilledField[],
+  readonly filledFieldsCollection: IFilledField[], // заполненые поля
+  readonly userCollection: IUser[],
 }
 
 export const reducer = combineReducers<State>({
@@ -46,6 +47,12 @@ export const reducer = combineReducers<State>({
           return [...state, action.payload];
         }        
       default:
+        return state;
+    }
+  },
+  userCollection: (state = [], action) => {
+    switch ( action.type ) {
+      default: 
         return state;
     }
   },

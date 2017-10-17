@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
-import { IFormRowModel } from '@src/models';
+import {
+  IFormRowModel,
+  IUser,
+  IFilledField
+} from '@src/models';
 import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';
 
 export interface StatefulFormProps {
   initialFormRowsCollection?: IFormRowModel[],
+  userCollection: IUser[],
+  filledFieldsCollection: IFilledField[],
 }
 
 interface DefaultProps {
@@ -38,8 +44,12 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     }
 
     formButtonHandler = (e) => {
-      console.log(new Date()); // не забудь убрать эту строку
       e.preventDefault();
+      console.log(new Date()); // не забудь убрать эту строку
+      const { userCollection, filledFieldsCollection } = this.props;
+
+      console.log(userCollection);
+      console.log(filledFieldsCollection);
     }
 
     render() {
