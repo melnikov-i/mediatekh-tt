@@ -6,7 +6,6 @@ export interface IFormRowModel {
   type: string,
   regExpTemplate: RegExp,
   hint: string,
-  isHintActive: boolean,
 }
 
 export interface IFilledField {

@@ -9,13 +9,13 @@ export interface SFCFormRowFieldSelectProps {
 }
 
 export const SFCFormRowFieldSelect: React.SFC<SFCFormRowFieldSelectProps> = (props) => {
-  const { options, htmlId, customSelectStyle } = props.properties;
+  const { options, htmlId, customStyle } = props.properties;
   const selectHandler = (e) => {
     console.log(e);
   }
   return (
     <select
-      className={css(styles.formSelect, customSelectStyle)}
+      className={css(styles.formSelect, customStyle)}
       id={htmlId}
       onBlur={selectHandler}>
       {

@@ -5,7 +5,7 @@ import {
   IFormRowModel,
   IFilledField,
   ISelectModel,
-  ISelectProperties,
+  // ISelectProperties,
 } from '@src/models';
 import {
   SelectActiveCollection,
@@ -13,7 +13,6 @@ import {
 } from '@src/collections';
 import styles from '@src/styles/form-row-styles';
 import errors from '@src/styles/error-styles';
-import SFCFormRowFieldSelect from '@src/components/sfc-form-row-field-select.usage';
 
 export interface SFCFormRowProps {
   items: IFormRowModel,
@@ -22,37 +21,52 @@ export interface SFCFormRowProps {
 }
 
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  const { htmlId, label, type, regExpTemplate } = props.items;
-  // , hint, isHintActive
+  const { htmlId, label, type, regExpTemplate, hint } = props.items;
   const { filledFieldsCollection, filledField } = props;
-
   const error: JSX.Element = (
     <span className={css(errors.errorMessage)}>
       Ошибка! Нет информации о поле.
     </span>
   );
-
-  const customStyle = ():any => {
+  interface ICustomParams {
+    borderStyle: {},
+    hintContainer: JSX.Element | null,
+  }
+  const getCustomParams = (): ICustomParams => {
     // Индекс поля коллекции заполненных полей
     let index: string = '';
+    let borderStyle: {} = {};
+    let hintContainer: JSX.Element | null = null;
     // если индекс поля есть в коллекции, получить этот индекс в переменную
     for ( let i in filledFieldsCollection ) {
       if ( filledFieldsCollection[i].htmlId == htmlId ) index = i;
     }
     // индекс получен или по умолчанию. Выполнение действия над рамкой поля.
     if ( index !== '' ) {
-      if ( filledFieldsCollection[index].isCorrect ) return styles.formInputGreen;
-      else return styles.formInputRed;
-    } else return styles.formInputDefault;
+      if ( filledFieldsCollection[index].isCorrect ) {
+        /* Поле заполнено верно */
+        borderStyle = styles.formInputGreen;
+        hintContainer =  null;
+      }
+      else {
+        /* Поле заполнено неверно */
+        borderStyle = styles.formInputRed;
+        hintContainer = (<span className={css(styles.formHint)}>{hint}</span>);
+      }
+    } else {
+      /* Поле не активировалось */
+      borderStyle = styles.formInputDefault;
+    }
+    return {borderStyle, hintContainer};
   };
+
+  const customParams: ICustomParams = getCustomParams();
 
   const fieldHandler = (e) => {
     if ( regExpTemplate.test(e.target.value) ) {
       filledField({ htmlId: htmlId, isCorrect: true });
-      console.log('htmlId: ', htmlId);
     } else {
       filledField({ htmlId: htmlId, isCorrect: false });
-      console.log('htmlId: ', htmlId);
     }
   }
 
@@ -63,7 +77,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
         return (
           <input
             type={type}
-            className={css(styles.formInput, customStyle())}
+            className={css(styles.formInput, customParams.borderStyle)}
             name={htmlId}
             id={htmlId}
             onBlur={fieldHandler}
@@ -80,20 +94,32 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
           }
         };
         const options = getOptions(htmlId);
-        const customSelectStyle = customStyle();
         if ( options.length != 0 ) {
-          const properties: ISelectProperties = { options, htmlId, customSelectStyle }
           return (
-            <SFCFormRowFieldSelect properties={properties} />
+            <select
+              className={css(styles.formSelect, customParams.borderStyle)}
+              id={htmlId}
+              onBlur={fieldHandler}>
+              {
+                options.map((item, index) => {
+                  return (
+                    <option
+                      key={index}
+                      className={css(styles.formOption)}
+                      value={item.value}>
+                        {item.label}
+                    </option>
+                  );
+                })
+              }
+            </select>
           );  
         } else {
           return error;
         }      
       default: return error;
-    }
-    
+    }    
   }
-
   return (
     <div className={css(styles.formRow)}>
       {/* Метка поля */}
@@ -105,6 +131,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
       {/* Элемент формы */}
       { formField(type) }
       {/* Подсказка в случае ввода некорректных данных */}
+      { customParams.hintContainer }
     </div>
   );
 };

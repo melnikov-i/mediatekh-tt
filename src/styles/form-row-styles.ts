@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
     color: 'red',
     display: 'inline-block',
   },
+  formSelect: {
+    fontSize: '16px',
+    height: '30px',
+  },
+  formOption: {
+    fontSize: '16px',
+  },
 });
 
 export default styles;  
