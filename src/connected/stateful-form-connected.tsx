@@ -17,6 +17,7 @@ const mapStateToProps = (state: RootState, ownProps: StatefulFormConnected) => (
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   filledField: actionCreators.filledField,
+  addUserInCollection: actionCreators.addUserInCollection,
 }, dispatch);
 
 export const StatefulFormConnected = 

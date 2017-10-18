@@ -4,6 +4,7 @@ import { IFilledField, IUser } from '@src/models';
 
 import {
   FILLED_FIELD,
+  ADD_USER_IN_COLLECTION,
 } from './';
 
 export type State = {
@@ -52,6 +53,8 @@ export const reducer = combineReducers<State>({
   },
   userCollection: (state = [], action) => {
     switch ( action.type ) {
+      case ADD_USER_IN_COLLECTION:
+        return [...state, action.payload];
       default: 
         return state;
     }
