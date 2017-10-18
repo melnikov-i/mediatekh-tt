@@ -1,8 +1,8 @@
-// import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { RootState } from '@src/redux'; // Dispatch !!!
-// import { actionCreators } from '@src/redux/form';
+import { RootState, Dispatch } from '@src/redux';
+import { actionCreators } from '@src/redux/form';
 import { StatefulForm } from '@src/components';
 import { IFormRowModel } from '@src/models';
 
@@ -15,8 +15,9 @@ const mapStateToProps = (state: RootState, ownProps: StatefulFormConnected) => (
   filledFieldsCollection: state.form.filledFieldsCollection,
 });
 
-// const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+  filledField: actionCreators.filledField,
+}, dispatch);
 
-// }, dispatch);
-
-export const StatefulFormConnected = connect(mapStateToProps, {})(StatefulForm);
+export const StatefulFormConnected = 
+  connect(mapStateToProps, mapDispatchToProps)(StatefulForm);

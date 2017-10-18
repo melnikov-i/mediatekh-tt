@@ -12,8 +12,9 @@ import errors from '@src/styles/error-styles';
 
 export interface StatefulFormProps {
   initialFormRowsCollection?: IFormRowModel[],
-  userCollection: IUser[],
+  userCollection: IUser[], // чтение коллекции (временное)
   filledFieldsCollection: IFilledField[],
+  filledField: (payload: IFilledField) => any,
 }
 
 interface DefaultProps {
@@ -46,10 +47,74 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     formButtonHandler = (e) => {
       e.preventDefault();
       console.log(new Date()); // не забудь убрать эту строку
-      const { userCollection, filledFieldsCollection } = this.props;
+      const { 
+        userCollection,
+        filledFieldsCollection,
+        filledField,
+      } = this.props;
+      console.log('======');
+      console.log('filledFieldCollection:', filledFieldsCollection);
 
-      console.log(userCollection);
-      console.log(filledFieldsCollection);
+      const { formRowsCollection } = this.state;
+      
+      const checkFields = () => {
+        let items = {};
+        let itemsCount: number = 0;
+        let valid: boolean;
+        formRowsCollection.forEach((formRow) => {
+          /* Для каждого элемента коллекции известных полей */
+          if ( filledFieldsCollection.length != 0 ) {
+            /* Если количество заполненных полей не равно 0 */
+            filledFieldsCollection.forEach((field) => {
+              /* Найти соответствующий элемент в коллекции заполненных полей */
+              if ( formRow.htmlId == field.htmlId ) {
+                /* Если элемент найден */
+                if ( field.isCorrect == true ) {
+                  /* И если он заполнен корректно, 
+                  добавить элемент в локальную коллекцию */
+                  items[field.htmlId] = field.value;
+                  itemsCount++;
+                }
+              } else {
+                /* Элемента в коллекции заполненных полей нет, но это
+                элемент active */
+                // if ( formRow.htmlId == 'active' ) {
+                //   filledField({
+                //     htmlId: formRow.htmlId,
+                //     isCorrect: true,
+                //     value: '1',
+                //   });
+                // }
+              }
+            });
+          } else {
+              filledField({
+                htmlId: formRow.htmlId,
+                isCorrect: false,
+                value: '' 
+              });              
+          }
+        });
+        
+        if ( !items['active'] ) {
+          filledField({
+            htmlId: 'active',
+            isCorrect: true,
+            value: '1',
+          });
+          items['active'] = '1';
+          itemsCount++;
+        }
+        
+        if ( itemsCount == formRowsCollection.length ) valid = true;
+        else valid = false;
+
+        return {valid, items};
+      }
+      
+      console.log('checkFields', checkFields());
+
+      console.log('userCollection:', userCollection);
     }
 
     render() {
