@@ -30,6 +30,8 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   
   /* Деструктуризация данных из Store */
   const { filledFieldsCollection, filledField } = props;
+
+  // let field: HTMLInputElement | HTMLSelectElement | null;
   
   /* Сообщение об ошибке */
   const error: JSX.Element = (
@@ -76,6 +78,11 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
       items.borderStyle = styles.formInputDefault;
       items.clearFieldValue = true;
     }
+    
+    // if ( items.clearFieldValue ) {
+    //   if ( field != null ) field.value = '';
+    // }
+
     return items;
   };
   /* Получение результата выполнения функции в константу */
@@ -91,7 +98,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
       filledField({ htmlId: htmlId, isCorrect: false, value: e.target.value });
     }
   }
-
+  
   /**
    * Создает экземпляр поля по заданному типу. 
    * Конкретизирует поле, придавая ему индивидуальность.
@@ -100,6 +107,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
    * @return{JSX.Element}
    */
   const formField = (type: string): JSX.Element => {
+    // const defaultValue = '';
     switch ( type ) {
       case 'text': /* Поле ввода текстовой информации */
         return (
@@ -108,7 +116,9 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
             className={css(styles.formInput, customParams.borderStyle)}
             name={htmlId}
             id={htmlId}
+            defaultValue={'defaultValue'}
             onBlur={fieldHandler}
+            // ref={ref => field = ref}
           />
         );
       case 'select': /* Поле выбора значения из списка */

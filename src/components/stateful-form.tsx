@@ -54,6 +54,7 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
      */
     formButtonHandler = (e) => {
       e.preventDefault(); // Отмена действия элемента по умолчанию
+      
       /* Деструктуризация данных, полученных из props */
       const { 
         userCollection,
@@ -66,6 +67,11 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
       /* Деструктуризация данных, полученных из State ###### */
       const { formRowsCollection } = this.state;
       
+      /**
+       * Обработчик заполненных полей
+       *
+       * @return{{valid: boolean, item: IUser}}
+       */      
       const checkFields = (): {valid: boolean, items: IUser} => {
         let items: IUser | any = {};
         let itemsCount: number = 0;
@@ -115,9 +121,10 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
           });
           items['active'] = true;
           itemsCount++;
-        }
-
+        }        
+        /* Количество всех полей совпадает с количеством добавленных */
         if ( itemsCount == formRowsCollection.length ) {
+          /* Добавляем нередактируемое поле "дата регистрации" */
           items['registered_on'] = new Date();
           valid = true;
         } else {
@@ -126,11 +133,13 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
 
         return {valid, items};
       }      
-      
+      /* Получение результата выполнения функции в константу */
       const fieldsAreChecked = checkFields();
       
       if ( fieldsAreChecked.valid ) {
+        /* Если данные внесены в форму корректно, добавить их в коллекцию */
         addUserInCollection(fieldsAreChecked.items);
+        /* Выполнить очистку коллекции заполненных полей для следующего заполнения */
         clearField();
       }
 
@@ -139,20 +148,35 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     }
 
     render() {
+      /* Проброс обработчика событий в метод render */
       const { formButtonHandler } = this;
+      /* Деструктуризация State, в котором лежит коллекция всех полей формы */
       const { formRowsCollection } = this.state;
+      /* Проверка содержимого коллекции */
       if ( formRowsCollection.length != 0 ) {
+        /* В случае успеха генерирует поля формы */
         return (
           <form action="">
             {/* Поля формы */}
             {
               formRowsCollection.map((item, index) => {
-                return <SFCFormRowConnected key={index} formRow={item} />
+                console.log(item);
+                return (
+                  <SFCFormRowConnected
+                    key={index}
+                    formRow={item}
+                    // value={value} Добавь изменяемое значение, которое будет перерисовывать строку
+                  />
+                );
               })
             }
             {/* Кнопка формы */}
             <div className={css(styles.formButtonWrapper)}>
-              <button className={css(styles.formButton)} onClick={formButtonHandler}>Добавить</button>
+              <button
+                className={css(styles.formButton)}
+                onClick={formButtonHandler}>
+                  Добавить
+                </button>
             </div>
           </form>
         );  
