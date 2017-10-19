@@ -4,6 +4,7 @@ import { IFilledField, IUser } from '@src/models';
 
 import {
   FILLED_FIELD,
+  CLEAR_FIELD,
   ADD_USER_IN_COLLECTION,
 } from './';
 
@@ -16,6 +17,23 @@ export const reducer = combineReducers<State>({
   filledFieldsCollection: (state = [], action) => {
     switch ( action.type ) {
       case FILLED_FIELD:
+        /* Преобразование типов полей входных данных */
+        const typedPayload = (payload: IFilledField): IFilledField => {
+          const matchingValue = (htmlId: string, value: any): string | boolean | number => {
+            switch ( htmlId ) {
+              case 'active': return ( value == '1' ) ? true : false;
+              case 'age': return value * 1;
+              case 'role': return value * 1;
+              case 'registered_on': return value * 1;
+              default: return value + '';
+            }
+          }
+          return {
+            htmlId: payload.htmlId,
+            isCorrect: payload.isCorrect,
+            value: matchingValue(payload.htmlId, payload.value)
+          };
+        }
         if ( state.length != 0 ) {
           // state содержит данные. Есть ли среди них payload?
           // 1. Проверить наличие payload в state
@@ -31,22 +49,25 @@ export const reducer = combineReducers<State>({
             return {answer, index};
           };
           const contain: {answer: boolean, index: string} = isContain();
+          
           if ( contain.answer ) {
             /* В state есть payload */
             let current: IFilledField[] = state.map((e, i) => {
               if ( i == contain.index )
-                return action.payload;
+                return typedPayload(action.payload);
               return e;
             });
             return current;
           } else {
             /* В state нет payload, добавить */
-            return [...state, action.payload];
+            return [...state, typedPayload(action.payload)];
           }
         } else {
           // state - пустой массив. Добавление к нему payload
-          return [...state, action.payload];
-        }        
+          return [...state, typedPayload(action.payload)];
+        }
+      case CLEAR_FIELD:
+        return [];
       default:
         return state;
     }

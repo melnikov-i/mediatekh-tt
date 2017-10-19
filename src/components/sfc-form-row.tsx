@@ -1,68 +1,89 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
-
+/* Импорт интерфейсов */
 import { 
   IFormRowModel,
   IFilledField,
   ISelectModel,
+  ICustomParams,
 } from '@src/models';
+/* Импорт коллекций для пунктов полей выбора (Select) */
 import {
   SelectActiveCollection,
   SelectRoleCollection,
 } from '@src/collections';
+/* Импорт стиля по умолчанию и для сообщения об ошибке */
 import styles from '@src/styles/form-row-styles';
 import errors from '@src/styles/error-styles';
 
+/* Интерфейс передаваемых в компонент параметров */
 export interface SFCFormRowProps {
-  items: IFormRowModel,
-  filledFieldsCollection: IFilledField[],
-  filledField: (payload: IFilledField) => any,
+  items: IFormRowModel, // Получены от родительского компонента
+  filledFieldsCollection: IFilledField[], // Получены из Store
+  filledField: (payload: IFilledField) => any, // Для передачи значений в Store
 }
 
+/* Компонент */
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  const { htmlId, label, type, regExpTemplate, hint } = props.items;
+  /* Деструктуризация данных, полученных от родительского компонента */
+  const { htmlId, label, type, regExpTemplate, hint/*, value*/ } = props.items;
+  
+  /* Деструктуризация данных из Store */
   const { filledFieldsCollection, filledField } = props;
+  
+  /* Сообщение об ошибке */
   const error: JSX.Element = (
     <span className={css(errors.errorMessage)}>
       Ошибка! Нет информации о поле.
     </span>
   );
-  
-  interface ICustomParams {
-    borderStyle: {},
-    hintContainer: JSX.Element | null,
-  }
-  
+
+  /**
+   * Генерирует индивидуальные параметры отображения поля:
+   *   1. Меняет цвет рамки в зависимости от корректности введенной информации
+   *   2. Включает и выключает отображение подсказки в зависимости 
+   *      от корректности введенной информации.
+   *   3. Определяет необходимость очистки значений полей в случае успешного
+   *      добавления данных в коллекцию UserCollection.
+   * 
+   * @return{ICustomParams}
+   */
   const getCustomParams = (): ICustomParams => {
-    // Индекс поля коллекции заполненных полей
-    let index: string = '';
-    let borderStyle: {} = {};
-    let hintContainer: JSX.Element | null = null;
-    // если индекс поля есть в коллекции, получить этот индекс в переменную
+    let index: string = ''; // Индекс поля коллекции заполненных полей
+    const items: ICustomParams = {
+      borderStyle: {},
+      hintContainer: null,
+      clearFieldValue: false,
+    }
+    // если такой же индекс поля есть в коллекции, получить этот индекс в переменную
     for ( let i in filledFieldsCollection ) {
       if ( filledFieldsCollection[i].htmlId == htmlId ) index = i;
     }
-    // индекс получен или по умолчанию. Выполнение действия над рамкой поля.
+    // индекс получен или по умолчанию. Выполнение декорирования поля.
     if ( index !== '' ) {
       if ( filledFieldsCollection[index].isCorrect ) {
         /* Поле заполнено верно */
-        borderStyle = styles.formInputGreen;
-        hintContainer =  null;
+        items.borderStyle = styles.formInputGreen;
+        items.hintContainer =  null;
       }
       else {
         /* Поле заполнено неверно */
-        borderStyle = styles.formInputRed;
-        hintContainer = (<span className={css(styles.formHint)}>{hint}</span>);
+        items.borderStyle = styles.formInputRed;
+        items.hintContainer = (<span className={css(styles.formHint)}>{hint}</span>);
       }
     } else {
       /* Поле не активировалось */
-      borderStyle = styles.formInputDefault;
+      items.borderStyle = styles.formInputDefault;
+      items.clearFieldValue = true;
     }
-    return {borderStyle, hintContainer};
+    return items;
   };
-
+  /* Получение результата выполнения функции в константу */
   const customParams: ICustomParams = getCustomParams();
 
+  /**
+   * Обработчик события редактирования поля формы.
+   */
   const fieldHandler = (e) => {
     if ( regExpTemplate.test(e.target.value) ) {
       filledField({ htmlId: htmlId, isCorrect: true, value: e.target.value });
@@ -71,10 +92,16 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     }
   }
 
+  /**
+   * Создает экземпляр поля по заданному типу. 
+   * Конкретизирует поле, придавая ему индивидуальность.
+   *
+   * @param{string} type - тип поля, полученный из props
+   * @return{JSX.Element}
+   */
   const formField = (type: string): JSX.Element => {
     switch ( type ) {
-      case 'text':
-        /* Поле ввода информации */
+      case 'text': /* Поле ввода текстовой информации */
         return (
           <input
             type={type}
@@ -84,17 +111,23 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
             onBlur={fieldHandler}
           />
         );
-      case 'select':
-        /* Поле выбора значения из списка */
-        const getOptions = (id: string): ISelectModel[] => {
-          /* Возвращает пунткы списка выбора */
-          switch ( id ) {
+      case 'select': /* Поле выбора значения из списка */
+        /**
+         * Генерирует пункты для поля с типом select
+         *
+         * @param{string} htmlId - строковый идентификатор, присвоенный полю
+         * @return{ISelectModel[]}
+         */
+        const getOptions = (htmlId: string): ISelectModel[] => {
+          switch ( htmlId ) {
             case 'active': return SelectActiveCollection;
             case 'role': return SelectRoleCollection;
             default: return [];
           }
         };
+        /* Получение результата выполнения функции в константу */
         const options = getOptions(htmlId);
+
         if ( options.length != 0 ) {
           return (
             <select
@@ -120,7 +153,8 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
         }      
       default: return error;
     }    
-  }
+  };
+
   return (
     <div className={css(styles.formRow)}>
       {/* Метка поля */}

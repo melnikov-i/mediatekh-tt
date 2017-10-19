@@ -1,21 +1,25 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
-
+/* Импорт интерфейсов */
 import {
   IFormRowModel,
   IUser,
   IFilledField
 } from '@src/models';
+/* Импорт дочернего компонента */
 import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
+/* Импорт стиля по умолчанию и для сообщения об ошибке */
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';
 
+/* Интерфейс передаваемых в компонент параметров */
 export interface StatefulFormProps {
-  initialFormRowsCollection?: IFormRowModel[],
-  userCollection: IUser[], // чтение коллекции (временное)
-  filledFieldsCollection: IFilledField[],
-  filledField: (payload: IFilledField) => any,
-  addUserInCollection: (payload: IUser) => any,
+  initialFormRowsCollection?: IFormRowModel[], // Параметры полей формы
+  userCollection: IUser[], // чтение коллекции (временное?)
+  filledFieldsCollection: IFilledField[], // Массив заполненных полей формы
+  filledField: (payload: IFilledField) => any, // Передает в Store заполенную строку
+  clearField: () => any, // Очищает массив заполненных полей формы в reducer
+  addUserInCollection: (payload: IUser) => any, // Добавляет верно заполненную форму в колекцию
 }
 
 interface DefaultProps {
@@ -44,21 +48,26 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
         this.setState({ formRowsCollection: initialFormRowsCollection });
       }
     }
-
+    
+    /**
+     * Обработчик события нажатия кнопки "Добавить"
+     */
     formButtonHandler = (e) => {
-      e.preventDefault();
-      console.log(new Date()); // не забудь убрать эту строку
+      e.preventDefault(); // Отмена действия элемента по умолчанию
+      /* Деструктуризация данных, полученных из props */
       const { 
         userCollection,
         filledFieldsCollection,
         filledField,
-        // addUserInCollection,
+        clearField,
+        addUserInCollection,
       } = this.props;
       
+      /* Деструктуризация данных, полученных из State ###### */
       const { formRowsCollection } = this.state;
       
       const checkFields = (): {valid: boolean, items: IUser} => {
-        let items: IUser | {} = {};
+        let items: IUser | any = {};
         let itemsCount: number = 0;
         let valid: boolean;
         formRowsCollection.forEach((formRow) => {
@@ -93,7 +102,7 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
               htmlId: formRow.htmlId,
               isCorrect: false,
               value: '' 
-            });              
+            });
           }
         });
         /* Все заполненные поля обработаны, но среди них нет active */
@@ -104,57 +113,28 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
             isCorrect: true,
             value: '1',
           });
-          items['active'] = '1';
+          items['active'] = true;
           itemsCount++;
         }
 
         if ( itemsCount == formRowsCollection.length ) {
-          items['registered_on'] = ''
+          items['registered_on'] = new Date();
           valid = true;
         } else {
           valid = false;
         }
 
-        // И, наконец, вы можете определить своего защитника, используя предикат. 
-        // Этот вариант предпочтительнее, если вы часто будете просить свою рыбку 
-        // плавать, а птичку – летать. В коде ниже происходит буквально следующее: 
-        // так как на вход функции может прийти экземпляр класса Fish или Bird – 
-        // компилятор затрудняется определить какой класс ему использовать для 
-        // проверки кода. То есть, конструкция instanceof внутри функции ему ничего 
-        // не говорит – это простое возвращение true или false. Однако, так как мы 
-        // указали предикат pet is Fish, компилятор начинает догадоваться, что, если
-        // функция возвращает true, то сейчас он имеет место с экземпляром класса Fish,
-        // иначе, если false – экземпляром класса Bird.
-
-        //   function isFish(pet: Fish | Bird): pet is Fish {
-        //       return pet instanceof Fish;
-        //   }
-
-        //   if (isFish(pet)) {
-        //       pet.swim();
-        //   } else {
-        //       pet.fly();
-        //   }
-
-
         return {valid, items};
-      }
-
+      }      
+      
       const fieldsAreChecked = checkFields();
       
       if ( fieldsAreChecked.valid ) {
-        // const user = fieldsAreChecked.items;
-
-        // console.log(addUserInCollection(user))
-      //   const items = {...fieldsAreChecked.items, , registered_on: 0};
-      //   const user: IUser = <IUser>items;
-        
-      //   addUserInCollection(user);
-      // console.log('user:', user);
+        addUserInCollection(fieldsAreChecked.items);
+        clearField();
       }
 
-      console.log('checkFields', checkFields());
-
+      console.log('checkFields', fieldsAreChecked);
       console.log('userCollection:', userCollection);
     }
 

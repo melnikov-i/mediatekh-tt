@@ -6,18 +6,26 @@ export interface IFormRowModel {
   type: string,
   regExpTemplate: RegExp,
   hint: string,
+  // value: string,
 }
 
 export interface IFilledField {
   htmlId: string,
   isCorrect: boolean,
-  value: string,
+  value: string | boolean | number,
 }
 
-export interface IFieldOptionsModel {
-  htmlId: string,
-  type: string,
-  regExpTemplate: RegExp,
-  hint: string,
-  isHintActive: boolean,
+export interface ICustomParams {
+  borderStyle: {},
+  hintContainer: JSX.Element | null,
+  clearFieldValue: boolean,
 }
+
+
+// export interface IFieldOptionsModel {
+//   htmlId: string,
+//   type: string,
+//   regExpTemplate: RegExp,
+//   hint: string,
+//   isHintActive: boolean,
+// }
