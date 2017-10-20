@@ -37,6 +37,9 @@ interface State {
 
 export const StatefulForm: React.ComponentClass<StatefulFormProps> =
   class extends React.Component<PropsWithDefaults, State> {
+    /* Для перегрузки формы */
+    private form: HTMLFormElement;
+
     static defaultProps: DefaultProps = {
       initialFormRowsCollection: [],
     };
@@ -60,7 +63,6 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
       
       /* Деструктуризация данных, полученных из props */
       const { 
-        userCollection,
         filledFieldsCollection,
         filledField,
         clearField,
@@ -115,7 +117,7 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
           }
         });
         /* Все заполненные поля обработаны, но среди них нет active */
-        if ( !items['active'] ) {
+        if ( ('active' in items) == false ) {
           /* поле active по умолчанию true */
           filledField({
             htmlId: 'active',
@@ -144,10 +146,9 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
         addUserInCollection(fieldsAreChecked.items);
         /* Выполнить очистку коллекции заполненных полей для следующего заполнения */
         clearField();
+        /* Выполнить перегрузку формы */
+        this.form.reset();
       }
-
-      console.log('checkFields', fieldsAreChecked);
-      console.log('userCollection:', userCollection);
     }
 
     render() {
@@ -155,20 +156,20 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
       const { formButtonHandler } = this;
       /* Деструктуризация State, в котором лежит коллекция всех полей формы */
       const { formRowsCollection } = this.state;
+      const { userCollection } = this.props;
+      console.log(userCollection);
       /* Проверка содержимого коллекции */
       if ( formRowsCollection.length != 0 ) {
         /* В случае успеха генерирует поля формы */
         return (
-          <form action="">
+          <form action={''} ref={(ref: HTMLFormElement)=> this.form = ref}>
             {/* Поля формы */}
             {
               formRowsCollection.map((item, index) => {
-                console.log(item);
                 return (
                   <SFCFormRowConnected
                     key={index}
                     formRow={item}
-                    // value={value} Добавь изменяемое значение, которое будет перерисовывать строку
                   />
                 );
               })

@@ -57,7 +57,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     const items: ICustomParams = {
       borderStyle: {},
       hintContainer: null,
-      clearFieldValue: false,
+      clearFieldValue: false, // удали эту переменную
     }
 
     /* Если такой же индекс поля есть в коллекции, получить этот индекс в переменную */
@@ -79,7 +79,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     } else {
       /* Поле не активировалось */
       items.borderStyle = styles.formInputDefault;
-      items.clearFieldValue = true;
+      items.clearFieldValue = true; // удали эту переменную
     }
 
     return items;
