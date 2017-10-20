@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
+
 /* Импорт интерфейсов */
 import {
   IFormRowModel,
   IUser,
   IFilledField
 } from '@src/models';
+
 /* Импорт дочернего компонента */
 import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
+
 /* Импорт стиля по умолчанию и для сообщения об ошибке */
 import styles from '@src/styles/form-styles';
 import errors from '@src/styles/error-styles';

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
+
 /* Импорт интерфейсов */
 import { 
   IFormRowModel,
@@ -7,11 +8,13 @@ import {
   ISelectModel,
   ICustomParams,
 } from '@src/models';
+
 /* Импорт коллекций для пунктов полей выбора (Select) */
 import {
   SelectActiveCollection,
   SelectRoleCollection,
 } from '@src/collections';
+
 /* Импорт стиля по умолчанию и для сообщения об ошибке */
 import styles from '@src/styles/form-row-styles';
 import errors from '@src/styles/error-styles';
@@ -26,13 +29,11 @@ export interface SFCFormRowProps {
 /* Компонент */
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   /* Деструктуризация данных, полученных от родительского компонента */
-  const { htmlId, label, type, regExpTemplate, hint/*, value*/ } = props.items;
-  
+  const { htmlId, label, type, regExpTemplate, hint } = props.items;
+
   /* Деструктуризация данных из Store */
   const { filledFieldsCollection, filledField } = props;
 
-  // let field: HTMLInputElement | HTMLSelectElement | null;
-  
   /* Сообщение об ошибке */
   const error: JSX.Element = (
     <span className={css(errors.errorMessage)}>
@@ -52,16 +53,18 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
    */
   const getCustomParams = (): ICustomParams => {
     let index: string = ''; // Индекс поля коллекции заполненных полей
+
     const items: ICustomParams = {
       borderStyle: {},
       hintContainer: null,
       clearFieldValue: false,
     }
-    // если такой же индекс поля есть в коллекции, получить этот индекс в переменную
+
+    /* Если такой же индекс поля есть в коллекции, получить этот индекс в переменную */
     for ( let i in filledFieldsCollection ) {
       if ( filledFieldsCollection[i].htmlId == htmlId ) index = i;
     }
-    // индекс получен или по умолчанию. Выполнение декорирования поля.
+    /* Индекс получен или по умолчанию. Выполнение декорирования поля. */
     if ( index !== '' ) {
       if ( filledFieldsCollection[index].isCorrect ) {
         /* Поле заполнено верно */
@@ -78,10 +81,6 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
       items.borderStyle = styles.formInputDefault;
       items.clearFieldValue = true;
     }
-    
-    // if ( items.clearFieldValue ) {
-    //   if ( field != null ) field.value = '';
-    // }
 
     return items;
   };
@@ -116,9 +115,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
             className={css(styles.formInput, customParams.borderStyle)}
             name={htmlId}
             id={htmlId}
-            defaultValue={'defaultValue'}
             onBlur={fieldHandler}
-            // ref={ref => field = ref}
           />
         );
       case 'select': /* Поле выбора значения из списка */
@@ -135,6 +132,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
             default: return [];
           }
         };
+        
         /* Получение результата выполнения функции в константу */
         const options = getOptions(htmlId);
 
