@@ -11,7 +11,6 @@ export interface StatefulFormConnected {
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulFormConnected) => ({
-  userCollection: state.form.userCollection,
   filledFieldsCollection: state.form.filledFieldsCollection,
 });
 

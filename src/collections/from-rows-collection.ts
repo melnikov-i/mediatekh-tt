@@ -8,7 +8,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'text',
     regExpTemplate: /^.{3,15}$/,
     hint: 'от 3 до 15 символов',
-    // value: '',
   }, {
     id: 1,
     htmlId: 'last_name',
@@ -16,7 +15,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'text',
     regExpTemplate: /^.{3,25}$/,
     hint: 'от 3 до 25 символов',
-    // value: '',
   }, {
     id: 2,
     htmlId: 'active',
@@ -24,7 +22,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'select',
     regExpTemplate: /^[01]{1}$/,
     hint: '',
-    // value: '',
   }, {
     id: 3,
     htmlId: 'age',
@@ -32,7 +29,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'text',
     regExpTemplate: /^(5[0-5]|[2-4][0-9]|1[89])$/,
     hint: 'от 18 до 55 лет',
-    // value: '',
   }, {
     id: 4,
     htmlId: 'login',
@@ -40,7 +36,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'text',
     regExpTemplate: /^[a-z0-9_-]+$/,
     hint: 'a-z, 0-9, \'_\' и \'*\'',
-    // value: '',
   }, {
     id: 5,
     htmlId: 'password',
@@ -48,7 +43,6 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'text',
     regExpTemplate: /^.{8,}$/,
     hint: 'Минимум 8 символов',
-    // value: '',
   }, {
     id: 6,
     htmlId: 'role',
@@ -56,6 +50,5 @@ export const FormRowsCollection: IFormRowModel[] = [
     type: 'select',
     regExpTemplate: /^[1-4]{1}$/,
     hint: 'Выберите',
-    // value: '',
   }
 ];

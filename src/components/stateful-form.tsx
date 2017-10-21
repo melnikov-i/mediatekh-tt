@@ -18,7 +18,6 @@ import errors from '@src/styles/error-styles';
 /* Интерфейс передаваемых в компонент параметров */
 export interface StatefulFormProps {
   initialFormRowsCollection?: IFormRowModel[], // Параметры полей формы
-  userCollection: IUser[], // чтение коллекции (временное?)
   filledFieldsCollection: IFilledField[], // Массив заполненных полей формы
   filledField: (payload: IFilledField) => any, // Передает в Store заполенную строку
   clearField: () => any, // Очищает массив заполненных полей формы в reducer
@@ -137,7 +136,8 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
         }
 
         return {valid, items};
-      }      
+      }
+
       /* Получение результата выполнения функции в константу */
       const fieldsAreChecked = checkFields();
       
@@ -154,10 +154,10 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
     render() {
       /* Проброс обработчика событий в метод render */
       const { formButtonHandler } = this;
+      
       /* Деструктуризация State, в котором лежит коллекция всех полей формы */
       const { formRowsCollection } = this.state;
-      const { userCollection } = this.props;
-      console.log(userCollection);
+      
       /* Проверка содержимого коллекции */
       if ( formRowsCollection.length != 0 ) {
         /* В случае успеха генерирует поля формы */

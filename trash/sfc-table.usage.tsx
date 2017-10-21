@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { SFCTable } from '@src/components';
-import { TableHead } from '@src/models';
+import { TableHead } from '@src/collections';
 
 export default () => (
   <SFCTable 
