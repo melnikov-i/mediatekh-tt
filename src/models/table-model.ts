@@ -1,3 +1,5 @@
+export type ITableRow = string[];
+
 export interface ITableHeader {
   header: string,
 }

@@ -3,7 +3,7 @@ import { css } from 'aphrodite/no-important';
 
 /* Импорт интерфейсов */
 import {
-  ITableHeader,
+  ITableRow,
   IUser
 } from '@src/models';
 
@@ -16,18 +16,18 @@ import errors from '@src/styles/error-styles';
 
 /* Интерфейс передаваемых в компонент параметров */
 export interface StatefulTableProps {
-  initialTableHeadCollection?: ITableHeader[], // имена ячеек таблицы
+  initialTableHeadCollection?: ITableRow, // имена ячеек таблицы
   userCollection: IUser[], // чтение коллекции пользователей  
 }
 
 interface DefaultProps {
-  initialTableHeadCollection: ITableHeader[],
+  initialTableHeadCollection: ITableRow,
 }
 
 type PropsWithDefaults = StatefulTableProps & DefaultProps;
 
 interface State {
-  tableHeadCollection: ITableHeader[],
+  tableHeadCollection: ITableRow,
 }
 
 
@@ -48,36 +48,34 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
       }
     }
 
-    // active: true
-    // age: 43
-    // first_name: "asdf"
-    // last_name: "asdf"
-    // login: "asdfasd"
-    // password: "asdfsadfasd"
-    // registered_on: Sun Oct 22 2017 03:08:51 GMT+0300 (MSK)
-    // role: 2
+    getTableRowsCollection() {
+      /* Деструктуризация Props, в котором лежит  UserCollection */
+      const { userCollection } = this.props;
 
-    getTableRowsCollection(userCollection: IUser[]) {
-      let localCollection: {name: string, value: string}[] = userCollection.map((e) => {
-        for ( let property in e ) {
-          switch ( property ) {
-            case: 'active': 
-              if ( e[property] ) {
-                return {name: property, value: 'No'};
-              } else {
-                return {name: property, value: 'No'};
-              }
-            case 'age':
-              return {name: property, value: String(e[property])};
-            case 
-          }
-        }
-        // switch ( e ) {
-        //   case: 'active': if ( e. )
-        // }
-        return '';
+      const tableRowsCollection: ITableRow[] = userCollection.map((row) => {
+        return [
+          this.getRoleStringFromNumber(row['role']),
+          row['login'],
+          row['last_name'] + ' ' + row['first_name'],
+          String(row['age']),
+          this.getDate(row['registered_on']),
+          this.getStringFromBoolean(row['active']),
+        ];
       });
-      return localCollection;
+      return tableRowsCollection;
+    }
+
+    getDate(timestamp: number): string {
+      const date = new Date(timestamp);
+      let out: string = '';
+      const month: string = String(date.getMonth());
+      const minutes: string = String(date.getMinutes());
+      out += String(date.getDate()) + '.';
+      out += ( month.length < 2 ) ? '0' + month + '.' : month + '.';
+      out += String(date.getFullYear()) + ' - ';
+      out += String(date.getHours()) + ':';
+      out += ( minutes.length < 2 ) ? '0' + minutes : minutes;
+      return out;
     }
 
     /* Получение текстового значения поля Role по его индексу */
@@ -100,24 +98,60 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
       }
     }
 
-    drawCell(contain: string | boolean | number, callback: any): JSX.Element {
-      return (
-        <td className={css(styles.tableCell)}>
-          {callback(contain)}
-        </td>
-      );
+    doSort(row: string[][], field: string, direction: boolean, callback: any) {
+      let i: number = 0;
+      const length: number = row.length;
+      if ( length > 0 ) {
+        while ( i < length ) {
+          let j = i + 1;
+          const currentDirection: boolean = callback(row[i][field], row[j][field]);
+          if ( currentDirection  == direction ) {
+            i++;
+          } else {
+            if ( row[i][field] != row[j][field] ) {
+              let tmp = row[j];
+              row[j] = row[i];
+              row[i] = tmp;
+              if ( i != 0 ) i--;
+            } else {
+              i++;
+            }
+          }
+        }
+      }
     }
 
+    callbackString(a: string, b: string): boolean {
+      const endOfWhile: number = ( a.length < b.length ) ? a.length : b.length;
+      let i: number = 0;
+      while ( i < endOfWhile ) {
+        if ( a[i] == b[i] ) {
+          i++;
+        } else {
+          if ( a[i] < b[i] ) return true;
+          else return false;
+        }
+      }
+      if ( a.length < b.length || a.length == b.length ) return true;
+      else return false;
+    }
+
+    callbackBoolean(a, b) {
+      if ( b ) return a;
+      else return true;
+    }
 
     render() {
       /* Деструктуризация State, в котором лежит коллекция ячеек шапки таблицы */
       const { tableHeadCollection } = this.state;
       
-      /* Деструктуризация Props, в котором лежит  UserCollection */
-      const { userCollection } = this.props;
-      // console.log(userCollection);
+      const tableRowCollection = this.getTableRowsCollection();
+      if (tableRowCollection.length > 1) {
+        console.log(this.doSort(tableRowCollection, '2', true, this.callbackString));
+      }
       /* Таблица не должна отрисовываться, если UserCollection пуста */
-      if ( userCollection.length != 0 ) {
+      if ( tableRowCollection.length != 0 ) {
+        console.log('tableRowCollection:', tableRowCollection);
         if ( tableHeadCollection.length != 0 ) {
           return (
             <table className={css(styles.table)}>
@@ -126,7 +160,7 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
                   {
                     tableHeadCollection.map((item, index) => (
                       <td key={index} className={css(styles.tableCell)}>
-                        {item.header}
+                        {item}
                       </td>
                     ))
                   }
@@ -134,27 +168,18 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
               </thead>
               <tbody>
                 {
-                  userCollection.map((e, i) => {
-                    // console.log(e);
-                    for (let a in e) {
-                      console.log('a:', a);
-                    }
+                  tableRowCollection.map((row, i) => {
                     return (
                       <tr key={i}>
-                        {this.drawCell(e.role, this.getRoleStringFromNumber)}
-                        <td className={css(styles.tableCell)}>
-                          {e.login}
-                        </td>
-                        <td className={css(styles.tableCell)}>
-                          {e.last_name + ' ' + e.first_name}
-                        </td>
-                        <td className={css(styles.tableCell)}>
-                          {e.age}
-                        </td>
-                        <td className={css(styles.tableCell)}>
-                          {e.role}
-                        </td>
-                        {this.drawCell(e.active, this.getStringFromBoolean)}
+                        {
+                          row.map((cell, i) => {
+                            return (
+                              <td key={i} className={css(styles.tableCell)}>
+                                {cell}
+                              </td>
+                            );
+                          })
+                        }
                       </tr>
                     );
                   })
