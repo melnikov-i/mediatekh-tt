@@ -6,7 +6,6 @@ export interface IFormRowModel {
   type: string,
   regExpTemplate: RegExp,
   hint: string,
-  // value: string,
 }
 
 export interface IFilledField {
@@ -20,12 +19,3 @@ export interface ICustomParams {
   hintContainer: JSX.Element | null,
   clearFieldValue: boolean,
 }
-
-
-// export interface IFieldOptionsModel {
-//   htmlId: string,
-//   type: string,
-//   regExpTemplate: RegExp,
-//   hint: string,
-//   isHintActive: boolean,
-// }

@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { RootState, /*Dispatch*/ } from '@src/redux';
 // import { actionCreators } from '@src/redux/form';
 import { StatefulTable } from '@src/components';
-import { ITableHead } from '@src/models';
+import { ITableHeader } from '@src/models';
 
 export interface StatefulTableConnected {
-  initialTableHeadCollection: ITableHead,
+  initialTableHeadCollection: ITableHeader[],
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulTableConnected) => ({
