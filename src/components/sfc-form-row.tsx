@@ -106,7 +106,6 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
    * @return{JSX.Element}
    */
   const formField = (type: string): JSX.Element => {
-    // const defaultValue = '';
     switch ( type ) {
       case 'text': /* Поле ввода текстовой информации */
         return (

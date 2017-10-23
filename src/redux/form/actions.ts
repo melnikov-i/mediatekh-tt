@@ -6,7 +6,7 @@ export const ADD_USER_IN_COLLECTION = 'ADD_USER_IN_COLLECTION';
 
 export type Actions = {
   FILLED_FIELD: { type: typeof FILLED_FIELD, payload: IFilledField },
-  CLEAR_FIELD: { type: typeof CLEAR_FIELD }
+  CLEAR_FIELD: { type: typeof CLEAR_FIELD },
   ADD_USER_IN_COLLECTION: { type: typeof ADD_USER_IN_COLLECTION, payload: IUser },
 };
 

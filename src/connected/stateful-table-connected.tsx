@@ -11,7 +11,7 @@ export interface StatefulTableConnected {
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulTableConnected) => ({
-  userCollection: state.form.userCollection,
+  
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreator({
