@@ -68,7 +68,7 @@ export const StatefulForm: React.ComponentClass<StatefulFormProps> =
         addUserInCollection,
       } = this.props;
       
-      /* Деструктуризация данных, полученных из State ###### */
+      /* Деструктуризация данных, полученных из State */
       const { formRowsCollection } = this.state;
       
       /**

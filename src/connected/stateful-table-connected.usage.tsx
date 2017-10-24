@@ -5,6 +5,6 @@ import { TableHeadCollection } from '@src/collections';
 
 export default () => (
   <StatefulTableConnected
-    initialTableHeadCollection={TableHeadCollection}
+    tableHeadCollection={TableHeadCollection}
   />
 );

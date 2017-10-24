@@ -7,11 +7,11 @@ import { StatefulTable } from '@src/components';
 import { ITableRow } from '@src/models';
 
 export interface StatefulTableConnected {
-  initialTableHeadCollection: ITableRow,
+  tableHeadCollection: ITableRow,
 }
 
 const mapStateToProps = (state: RootState, ownProps: StatefulTableConnected) => ({
-  
+  tableRowsCollection: state.table.tableRowsCollection,
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreator({
