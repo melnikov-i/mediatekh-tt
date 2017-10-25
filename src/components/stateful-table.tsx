@@ -39,6 +39,14 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
       }
     }
 
+    handlerUp(e) {
+      console.log(e.target);
+    }
+
+    handlerDown(e) {
+      console.log(e.target);
+    }
+
     // shouldComponentUpdate({ tableRowsCollection }: PropsWithDefaults): boolean {
     //   return tableRowsCollection.length > this.props.tableRowsCollection.length; // temporary
     // }
@@ -48,16 +56,28 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
       const { tableHeadCollection } = this.props;
       /* Деструктуризация данных, полученных из state */
       const { tableRowsStateCollection } = this.state;
+      console.log(tableRowsStateCollection);
+      const { handlerUp, handlerDown } = this;
       return (
         <table className={css(styles.table)}>
           <thead>
             <tr>
               {
-                tableHeadCollection.map((item, index) => (
-                  <td key={index} className={css(styles.tableCell)}>
-                    {item}
-                  </td>
-                ))
+                tableHeadCollection.map((item, index) => {
+                  return (
+                    <td key={index} className={css(styles.tableCell)}>
+                      {item}
+                      <a href="">
+                        <span className={css(styles.tableSortUp)} onClick={handlerUp}>
+                        </span>
+                      </a>
+                      <a href="">
+                        <span className={css(styles.tableSortDown)} onClick={handlerDown}>
+                        </span>
+                      </a>
+                    </td>
+                  );
+                })
               }
             </tr>
           </thead>
