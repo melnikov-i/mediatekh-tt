@@ -1,21 +1,22 @@
 /* Модель всех параметров строки формы */
 export interface IFormRowsStaticParamsModel {
-  id: number,
-  htmlId: string,
+  id: string,
   label: string,
   type: string,
   regExpTemplate: RegExp,
   hint: string,
+  selectOptions?: ISelectModel[],
 }
 
 export interface IFormRowsDynamicParamsModel {
-  htmlId: string,
-  type: string,
-  isCorrect: boolean,
-  value: string | boolean | number,  
+  value: string, // | boolean | number,
+  isCorrect?: boolean,
 }
 
-
+export interface ISelectModel {
+  value: string,
+  label: string,
+}
 
 
 /* Это на удаление */

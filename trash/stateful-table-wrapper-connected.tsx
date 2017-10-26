@@ -6,7 +6,7 @@ import { actionCreators } from '@src/redux/table';
 import { StatefulTableWrapper } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
-  userCollection: state.form.userCollection,
+  // userCollection: state.form.userCollection,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

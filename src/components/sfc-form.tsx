@@ -5,20 +5,15 @@ import { css } from 'aphrodite/no-important';
 /* Импорт интерфейсов */
 import {
   IFormRowsStaticParamsModel,
-  // ISelectModel,
-  // IUser,
-  // IFilledField
 } from '@src/models';
 
-/* Импорт коллекций для пунктов полей выбора (Select) */
-// import {
-//   SelectActiveCollection,
-//   SelectRoleCollection,
-// } from '@src/collections';
+/* Импорт дочернего компонента */
+import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
+
 
 /* Импорт стилей */
 import styles from '@src/styles/form-styles';
-// import errors from '@src/styles/error-styles';
+import errors from '@src/styles/error-styles';
 
 /* Интерфейс передаваемых в интерфейс параметров */
 export interface SFCFormProps {
@@ -27,7 +22,51 @@ export interface SFCFormProps {
 
 /* Компонент */
 export const SFCForm: React.SFC<SFCFormProps> = (props) => {
-  const { formRowsStaticCollection } = props;
+  /* Деструктуризация props, в котором лежит коллекция всех полей формы */
+  const { formRowsStaticCollection, } = props;
+
+  /* Обработчик события нажатия кнопки "Добавить" */
+  const formButtonHandler = (e) => {
+    e.preventDefault();
+  }
+  
+  /* Проверка содержимого коллекции */
+  if ( formRowsStaticCollection.length != 0 ) {
+    /* В случае успеха генерирует поля формы */
+    return (
+      <form action={''}>
+        {/* Поля формы */
+          formRowsStaticCollection.map((item) => {
+            return (
+              <SFCFormRowConnected
+                key={item.id}
+                formRow={item}
+              />
+            );
+          })
+        }
+        {/* Кнопка формы */}
+        <div className={css(styles.formButtonWrapper)}>
+          <button
+            className={css(styles.formButton)}
+            onClick={formButtonHandler}>
+              Добавить
+            </button>
+        </div>
+      </form>
+    );  
+  } else {
+    return (
+      <span className={css(errors.errorMessage)}>
+        Ошибка! Не удалось получить поля формы.
+      </span>
+    );
+  }
+}
+
+
+
+
 
   /* Сообщение об ошибке */
   // const error: JSX.Element = (
@@ -36,33 +75,54 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
   //   </span>
   // );
   
-  /**
-   * Создает экземпляр поля по заданному типу. 
-   * Конкретизирует поле, придавая ему индивидуальность.
-   *
-   * @param{string} type - тип поля, полученный из props
-   * @return{JSX.Element}
-   */
-  // const getFormField = (type: string, htmlId: string, value: string): JSX.Element => {
+  // const customStyle = (isCorrect: boolean | undefined): any => {
+  //   if ( isCorrect != undefined ) {
+  //     if ( isCorrect ) {
+  //       return styles.formInputGreen;
+  //     } else {
+  //       return styles.formInputRed;
+  //     }
+  //   }
+  // };
+
+  // const updateInputHandler = (e) => {
+  //   addInFormRowsDynamic([{id, value}]);
+  // }
+
+  // const getInput = (formRowsDynamicCollection: IFormRowsDynamicParamsModel): JSX.Element => {
+  //   const { id, value, isCorrect } = formRowsDynamicCollection;
+  //   return (
+  //     <input
+  //       type={'text'}
+  //       className={css(styles.formInput, customStyle(isCorrect))}
+  //       name={id}
+  //       id={id}
+  //       value={value}
+  //       onChange={updateInputHandler}
+  //     />
+  //   );
+  // }
+
+    // const getFormElement = (type: string, id: string, value: string): JSX.Element => {
   //   switch ( type ) {
   //     case 'text': /* Поле ввода текстовой информации */
   //       return (
   //         <input
   //           type={type}
   //           className={css(styles.formInput, styles.formInputDefault)}
-  //           name={htmlId}
-  //           id={htmlId}
+  //           name={id}
+  //           id={id}
   //           value={}
   //         />
   //       );
   //     case 'select': /* Поле выбора значения из списка */
   //       /* Получение результата выполнения функции в константу */
-  //       const options: ISelectModel[] = getOptions(htmlId);
+  //       const options: ISelectModel[] = getOptions(id);
   //       if ( options.length != 0 ) {
   //         return (
   //           <select
   //             className={css(styles.formSelect, styles.formInputDefault)}
-  //             id={htmlId}>
+  //             id={id}>
   //             {
   //               options.map((item, index) => {
   //                 return (
@@ -83,68 +143,3 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
   //     default: return error;
   //   }
   // }
-
-  /**
-   * Генерирует пункты для поля с типом select
-   *
-   * @param{string} htmlId - строковый идентификатор, присвоенный полю
-   * @return{ISelectModel[]}
-   */
-  // const getOptions = (htmlId: string): ISelectModel[] => {
-  //   switch ( htmlId ) {
-  //     case 'active': return SelectActiveCollection;
-  //     case 'role': return SelectRoleCollection;
-  //     default: return [];
-  //   }
-  // };
-
-
-
-  return (
-    <form action={''}>
-      {/* Поля формы */}
-      {
-        formRowsStaticCollection.map((item, index) => {
-          const { id, htmlId, /*type, */label } = item;
-          return (
-            <div key={id} className={css(styles.formRow)}>
-              {/* Метка поля */}
-              <label
-                htmlFor={htmlId}
-                className={css(styles.formLabel)}>
-                  {label}
-              </label>
-              {/* Элемент формы */}
-              {/* getFormField(type, htmlId) */}
-              {/* Подсказка в случае ввода некорректных данных */}
-              {/* customParams.hintContainer */}
-            </div>
-          );
-        })
-      }
-      {/* Кнопка формы */}
-      <div className={css(styles.formButtonWrapper)}>
-        <button className={css(styles.formButton)}>{'Добавить'}</button>
-      </div>
-    </form>
-  );
-}
-
-
-//             <div className={css(styles.formRow)}>
-//               {/* Метка поля */}
-//               <label
-//                 htmlFor={htmlId}
-//                 className={css(styles.formLabel)}>
-//                   {label}
-//               </label>
-//               {/* Элемент формы */}
-//               { formField(type) }
-//               {/* Подсказка в случае ввода некорректных данных */}
-//               { customParams.hintContainer }
-//             </div>
-
-            // <SFCFormRowConnected
-            //   key={index}
-            //   formRow={item}
-            // />

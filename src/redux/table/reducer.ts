@@ -3,8 +3,7 @@ import { combineReducers } from 'redux';
 /* Импорт интерфейсов */
 import { IUser, ITableRow } from '@src/models';
 
-/* Импорт вспомогательных коллекций */
-import { SelectRoleCollection } from '@src/collections';
+
 
 import {
   ADD_USER_TO_ROWS,
@@ -28,7 +27,7 @@ export const reducer = combineReducers<State>({
         const getTableRowsCollection = (payload: IUser[]): ITableRow[] => {
           const tableRowsCollection: ITableRow[] = payload.map((row) => {
             return [
-              getRoleStringFromNumber(row['role']),
+              // getRoleStringFromNumber(row['role']),
               row['login'],
               row['last_name'] + ' ' + row['first_name'],
               String(row['age']),
@@ -64,15 +63,15 @@ export const reducer = combineReducers<State>({
          * @param{number} index - числовой индекс роли из коллекции
          * @return{string}
          */
-        const getRoleStringFromNumber = (index: number): string => {
-          const localIndex: string = String(index);
-          for ( let i in SelectRoleCollection ) {
-            if ( SelectRoleCollection[i].value == localIndex ) {
-              return SelectRoleCollection[i].label
-            }
-          }
-          return 'error';
-        }
+        // const getRoleStringFromNumber = (index: number): string => {
+        //   const localIndex: string = String(index);
+        //   for ( let i in SelectRoleCollection ) {
+        //     if ( SelectRoleCollection[i].value == localIndex ) {
+        //       return SelectRoleCollection[i].label
+        //     }
+        //   }
+        //   return 'error';
+        // }
         
         /**
          * Получение текстового значения поля Active

@@ -7,7 +7,7 @@ import { SFCForm } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
   formRowsStaticCollection: state.form.formRowsStaticCollection,
-  // filledFieldsCollection: state.form.filledFieldsCollection,
+  // formRowsDynamicCollection: state.form.formRowsDynamicCollection,
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

@@ -2,53 +2,78 @@ import { IFormRowsStaticParamsModel } from '@src/models';
 
 export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
   {
-    id: 0,
-    htmlId: 'first_name',
+    id: 'first_name',
     label: 'Имя',
     type: 'text',
     regExpTemplate: /^.{3,15}$/,
     hint: 'от 3 до 15 символов',
   }, {
-    id: 1,
-    htmlId: 'last_name',
+    id: 'last_name',
     label: 'Фамилия',
     type: 'text',
     regExpTemplate: /^.{3,25}$/,
     hint: 'от 3 до 25 символов',
   }, {
-    id: 2,
-    htmlId: 'active',
+    id: 'active',
     label: 'Активен',
     type: 'select',
     regExpTemplate: /^[01]{1}$/,
     hint: '',
+    selectOptions: [
+      {
+        value: '1',
+        label: 'Yes',
+      },
+      {
+        value: '0',
+        label: 'No'
+      },
+    ],
   }, {
-    id: 3,
-    htmlId: 'age',
+    id: 'age',
     label: 'Возраст',
     type: 'text',
     regExpTemplate: /^(5[0-5]|[2-4][0-9]|1[89])$/,
     hint: 'от 18 до 55 лет',
   }, {
-    id: 4,
-    htmlId: 'login',
+    id: 'login',
     label: 'Логин',
     type: 'text',
     regExpTemplate: /^[a-z0-9_-]+$/,
     hint: 'a-z, 0-9, \'_\' и \'*\'',
   }, {
-    id: 5,
-    htmlId: 'password',
+    id: 'password',
     label: 'Пароль',
     type: 'text',
     regExpTemplate: /^.{8,}$/,
     hint: 'Минимум 8 символов',
   }, {
-    id: 6,
-    htmlId: 'role',
+    id: 'role',
     label: 'Роль',
     type: 'select',
     regExpTemplate: /^[1-4]{1}$/,
     hint: 'Выберите',
+    selectOptions: [
+      {
+        value: '0',
+        label: 'Choose',
+      },
+      {
+        value: '1',
+        label: 'Administrator',
+      },
+      {
+        value: '2',
+        label: 'Technician',
+      },
+      {
+        value: '3',
+        label: 'Manager',
+      },
+      {
+        value: '4',
+        label: 'Supervisor',
+      }
+    ],
   }
 ];
