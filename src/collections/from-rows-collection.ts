@@ -1,6 +1,6 @@
-import { IFormRowModel } from '@src/models';
+import { IFormRowsStaticParamsModel } from '@src/models';
 
-export const FormRowsCollection: IFormRowModel[] = [
+export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
   {
     id: 0,
     htmlId: 'first_name',

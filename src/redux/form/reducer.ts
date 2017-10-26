@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
 
-import { IFilledField, IUser } from '@src/models';
+import {
+  IFilledField,
+  IUser,
+  IFormRowsStaticParamsModel,
+} from '@src/models';
+
+import { FormRowsCollection } from '@src/collections';
 
 import {
   FILLED_FIELD,
@@ -9,11 +15,19 @@ import {
 } from './';
 
 export type State = {
+  readonly formRowsStaticCollection: IFormRowsStaticParamsModel[], // Статические данные формы
   readonly filledFieldsCollection: IFilledField[], // заполненые поля
   readonly userCollection: IUser[],
 }
 
 export const reducer = combineReducers<State>({
+  /* Отдаем компоненту параметры строки */
+  formRowsStaticCollection: (state = FormRowsCollection, action) => {
+    return state;
+  },
+  
+
+
   filledFieldsCollection: (state = [], action) => {
     switch ( action.type ) {
       case FILLED_FIELD:

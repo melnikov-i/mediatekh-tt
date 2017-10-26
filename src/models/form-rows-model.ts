@@ -1,5 +1,5 @@
 /* Модель всех параметров строки формы */
-export interface IFormRowModel {
+export interface IFormRowsStaticParamsModel {
   id: number,
   htmlId: string,
   label: string,
@@ -8,6 +8,17 @@ export interface IFormRowModel {
   hint: string,
 }
 
+export interface IFormRowsDynamicParamsModel {
+  htmlId: string,
+  type: string,
+  isCorrect: boolean,
+  value: string | boolean | number,  
+}
+
+
+
+
+/* Это на удаление */
 export interface IFilledField {
   htmlId: string,
   isCorrect: boolean,
@@ -17,5 +28,4 @@ export interface IFilledField {
 export interface ICustomParams {
   borderStyle: {},
   hintContainer: JSX.Element | null,
-  clearFieldValue: boolean,
 }

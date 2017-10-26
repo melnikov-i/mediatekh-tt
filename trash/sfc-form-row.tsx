@@ -46,8 +46,6 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
    *   1. Меняет цвет рамки в зависимости от корректности введенной информации
    *   2. Включает и выключает отображение подсказки в зависимости 
    *      от корректности введенной информации.
-   *   3. Определяет необходимость очистки значений полей в случае успешного
-   *      добавления данных в коллекцию UserCollection.
    * 
    * @return{ICustomParams}
    */
@@ -57,7 +55,6 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     const items: ICustomParams = {
       borderStyle: {},
       hintContainer: null,
-      clearFieldValue: false, // удали эту переменную
     }
 
     /* Если такой же индекс поля есть в коллекции, получить этот индекс в переменную */
@@ -79,7 +76,6 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     } else {
       /* Поле не активировалось */
       items.borderStyle = styles.formInputDefault;
-      items.clearFieldValue = true; // удали эту переменную
     }
 
     return items;
