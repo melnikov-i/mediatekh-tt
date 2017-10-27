@@ -19,22 +19,27 @@ export interface SFCFormRowProps {
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   const { id, label } = props.items;
   const { formRowsDynamicCollection, addValueIntoDynamicCollection } = props;
+  const { value } = formRowsDynamicCollection[id];
 
   const updateInputHandler = (e) => {
+    console.log('value:', e.currentTarget.value);
     addValueIntoDynamicCollection({id: id, value: e.currentTarget.value});
   }
 
-
+  console.log('value in component:', value);
+  console.log(formRowsDynamicCollection);
+// value={(formRowsDynamicCollection.length > 0) ? formRowsDynamicCollection[id].value : ''}
+        
 
   const getInput = (): JSX.Element => {
     return (
       <input
         type={'text'}
-        className={css(styles.formInput)}
+        className={css(styles.formInput, styles.formInputDefault)}
         name={id}
         id={id}
-        value={(formRowsDynamicCollection.length > 0) ? formRowsDynamicCollection[id].value : ''}
         onChange={updateInputHandler}
+        value={value}
       />
     );
   }

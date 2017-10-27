@@ -9,7 +9,7 @@ export interface IFormRowsStaticParamsModel {
 }
 
 export interface IFormRowsDynamicParamsModel {
-  value: string, // | boolean | number,
+  value: string,
   isCorrect?: boolean,
 }
 

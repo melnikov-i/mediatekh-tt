@@ -32,17 +32,24 @@ export const reducer = combineReducers<State>({
   
   /* Динамически изменяемые данные формы */
   formRowsDynamicCollection: (state = [], action) => {
+    let newState = state;
     switch ( action.type ) {
       case ADD_VALUE_INTO_DYNAMIC_COLLECTION:
-        let newState = state;
-        if ( action.payload.id in newState ) {
-          newState[action.payload.id].value = action.payload.value;
-        } else {
-          newState = [...newState, newState[action.payload.id].value = action.payload.value]
-        }
+        console.log('payload:', action.payload);
+        newState[action.payload.id] = {
+          value: action.payload.value,
+          isCorrect: undefined,
+        };
+        console.log('newState:', newState);
         return newState;
       default:
-        return state;
+        for ( let i in FormRowsCollection ) {
+          newState[FormRowsCollection[i].id] = {
+            value: '',
+            isCorrect: undefined,
+          };
+        }
+        return newState;
     }
   },
 
