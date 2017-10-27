@@ -55,6 +55,7 @@ export const reducer = combineReducers<State>({
   userCollection: ( state = [], action ) => {
     switch ( action.type ) {
       case ADD_FILLED_FIELDS_IN_USER_COLLECTION:
+        console.log(action.payload);
         return state;
       default:
         return state;

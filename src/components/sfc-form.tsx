@@ -50,7 +50,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
             );
           })
         }
-        {/* Кнопка формы */}
+        {/* Кнопка формы */console.log('[RENDER]')}
         <div className={css(styles.formButtonWrapper)}>
           <button
             className={css(styles.formButton)}

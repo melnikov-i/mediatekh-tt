@@ -23,7 +23,10 @@ export interface SFCFormRowProps {
 /* Компонент */
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   const { id, label, type, hint, regExpTemplate } = props.items;
-  const { formRowsDynamicCollection, addValueInDynamicCollection } = props;
+  const { addValueInDynamicCollection } = props;
+  const { value, isCorrect } = props.formRowsDynamicCollection[id];
+
+  console.log(value, isCorrect);
   
   /* Выводит сообщение об ошибке при рендеринге элемента формы */
   const getError = (): JSX.Element => (
@@ -34,7 +37,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   /* Определяет цвет рамки при редактировании ее содержимого */
   const getCurrentStyle = () => {
-    switch ( formRowsDynamicCollection[id].isCorrect ) {
+    switch ( isCorrect ) {
       case true: return styles.formInputGreen;
       case false: return styles.formInputRed;
       default: return styles.formInputDefault;
@@ -51,7 +54,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
         id={id}
         onChange={updateInputHandler}
         onBlur={fieldHandler}
-        value={formRowsDynamicCollection[id].value}
+        value={value}
       />
     );
   }
@@ -95,7 +98,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   /* Отрисовывает подсказку при необходимости */
   const getHint = (): JSX.Element | null => {
-    if ( formRowsDynamicCollection[id].isCorrect === false ) {
+    if ( isCorrect === false ) {
       return <span className={css(styles.formHint)}>{hint}</span>;
     } else {
       return null;
@@ -130,7 +133,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   return (
     <div className={css(styles.formRow)}>
-      {/* Метка поля */}
+      {/* Метка поля */console.log('render:', id)}
       <label
         htmlFor={id}
         className={css(styles.formLabel)}>
