@@ -13,20 +13,13 @@ export interface IFormRowsDynamicParamsModel {
   isCorrect?: boolean,
 }
 
+export interface IFormRowsDynamicDispatchModel {
+  id: string,
+  value: string,
+  isCorrect?: boolean,
+}
+
 export interface ISelectModel {
   value: string,
   label: string,
-}
-
-
-/* Это на удаление */
-export interface IFilledField {
-  htmlId: string,
-  isCorrect: boolean,
-  value: string | boolean | number,
-}
-
-export interface ICustomParams {
-  borderStyle: {},
-  hintContainer: JSX.Element | null,
 }

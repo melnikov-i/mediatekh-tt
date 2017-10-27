@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import {
-  // IFilledField,
   // IUser,
   IFormRowsStaticParamsModel, // Импорт модели статических данных формы
   IFormRowsDynamicParamsModel, // Импорт модели динамических данных формы
@@ -11,16 +10,13 @@ import {
 import { FormRowsCollection } from '@src/collections';
 
 import {
-  ADD_VALUE_INTO_DYNAMIC_COLLECTION
-  // FILLED_FIELD,
-  // CLEAR_FIELD,
-  // ADD_USER_IN_COLLECTION,
+  ADD_VALUE_IN_DYNAMIC_COLLECTION,
+  ADD_FILLED_FIELDS_IN_USER_COLLECTION,
 } from './';
 
 export type State = {
   readonly formRowsStaticCollection: IFormRowsStaticParamsModel[], // Статические данные формы
-  readonly formRowsDynamicCollection: IFormRowsDynamicParamsModel[], // Динамические данные формы
-  // readonly filledFieldsCollection: IFilledField[], // заполненые поля
+  readonly formRowsDynamicCollection: IFormRowsDynamicParamsModel, // Динамические данные формы
   // readonly userCollection: IUser[],
 }
 
@@ -31,28 +27,43 @@ export const reducer = combineReducers<State>({
   },
   
   /* Динамически изменяемые данные формы */
-  formRowsDynamicCollection: (state = [], action) => {
-    let newState = state;
+  formRowsDynamicCollection: (state = {}, action) => {
     switch ( action.type ) {
-      case ADD_VALUE_INTO_DYNAMIC_COLLECTION:
-        console.log('payload:', action.payload);
-        newState[action.payload.id] = {
-          value: action.payload.value,
-          isCorrect: undefined,
+      case ADD_VALUE_IN_DYNAMIC_COLLECTION:
+        return {
+          ...state,
+          [action.payload.id]: {
+            value: action.payload.value,
+            isCorrect: action.payload.isCorrect,
+          }
         };
-        console.log('newState:', newState);
-        return newState;
       default:
+        let newState = {...state};
         for ( let i in FormRowsCollection ) {
-          newState[FormRowsCollection[i].id] = {
-            value: '',
-            isCorrect: undefined,
-          };
+          newState = {
+            ...newState,
+            [FormRowsCollection[i].id]: {
+              value: '',
+              isCorrect: undefined,  
+            }
+          }
         }
         return newState;
     }
   },
 
+  userCollection: ( state = [], action ) => {
+    switch ( action.type ) {
+      case ADD_FILLED_FIELDS_IN_USER_COLLECTION:
+        return state;
+      default:
+        return state;
+    }
+  }
+
+
+  // CLEAR_FIELD,
+  // ADD_USER_IN_COLLECTION,
 
   // filledFieldsCollection: (state = [], action) => {
   //   switch ( action.type ) {

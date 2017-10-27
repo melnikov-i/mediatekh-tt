@@ -2,48 +2,131 @@ import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
 /* Импорт интерфейсов */
-import { IFormRowsStaticParamsModel, IFormRowsDynamicParamsModel } from '@src/models';
+import {
+  IFormRowsStaticParamsModel,
+  IFormRowsDynamicParamsModel,
+  IFormRowsDynamicDispatchModel,
+} from '@src/models';
 
 /* Импорт стиля по умолчанию и для сообщения об ошибке */
 import styles from '@src/styles/form-styles';
-// import errors from '@src/styles/error-styles';
+import errors from '@src/styles/error-styles';
 
 /* Интерфейс передаваемых в компонент параметров */
 export interface SFCFormRowProps {
   items: IFormRowsStaticParamsModel, // Получены от родительского компонента
-  formRowsDynamicCollection: IFormRowsDynamicParamsModel[],
-  addValueIntoDynamicCollection: (payload: {id: string, value: string}) => any
+  formRowsDynamicCollection: IFormRowsDynamicParamsModel,
+  addValueInDynamicCollection: (payload: IFormRowsDynamicDispatchModel) => any
 }
+
 
 /* Компонент */
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
-  const { id, label } = props.items;
-  const { formRowsDynamicCollection, addValueIntoDynamicCollection } = props;
-  const { value } = formRowsDynamicCollection[id];
+  const { id, label, type, hint, regExpTemplate } = props.items;
+  const { formRowsDynamicCollection, addValueInDynamicCollection } = props;
+  
+  /* Выводит сообщение об ошибке при рендеринге элемента формы */
+  const getError = (): JSX.Element => (
+      <span className={css(errors.errorMessage)}>
+        Ошибка! Нет информации о поле.
+      </span>
+    )
 
-  const updateInputHandler = (e) => {
-    console.log('value:', e.currentTarget.value);
-    addValueIntoDynamicCollection({id: id, value: e.currentTarget.value});
+  /* Определяет цвет рамки при редактировании ее содержимого */
+  const getCurrentStyle = () => {
+    switch ( formRowsDynamicCollection[id].isCorrect ) {
+      case true: return styles.formInputGreen;
+      case false: return styles.formInputRed;
+      default: return styles.formInputDefault;
+    }
   }
 
-  console.log('value in component:', value);
-  console.log(formRowsDynamicCollection);
-// value={(formRowsDynamicCollection.length > 0) ? formRowsDynamicCollection[id].value : ''}
-        
-
+  /* Отрисовывает поле ввода */
   const getInput = (): JSX.Element => {
     return (
       <input
         type={'text'}
-        className={css(styles.formInput, styles.formInputDefault)}
+        className={css(styles.formInput, getCurrentStyle())}
         name={id}
         id={id}
         onChange={updateInputHandler}
-        value={value}
+        onBlur={fieldHandler}
+        value={formRowsDynamicCollection[id].value}
       />
     );
   }
 
+  /* Отрисовывает поле выбора */
+  const getSelect = (): JSX.Element => {
+    const { selectOptions } = props.items;
+    if ( selectOptions !== undefined && selectOptions.length != 0 ) {
+      return (
+        <select
+          className={css(styles.formSelect, getCurrentStyle())}
+          id={id}
+          onBlur={fieldHandler}>
+            {
+              selectOptions.map((item, index) => {
+                return (
+                  <option
+                    key={index}
+                    className={css(styles.formOption)}
+                    value={item.value}>
+                      {item.label}
+                  </option>
+                );
+              })
+            }
+        </select>
+      );
+    } else {
+      return getError();
+    }
+  }
+
+  /* Определяет отрисовываемый элемент по его типу */
+  const getFormElement = (): JSX.Element => {
+    switch ( type ) {
+      case 'text': return getInput();
+      case 'select': return getSelect();
+      default: return getError();
+    }
+  }
+
+  /* Отрисовывает подсказку при необходимости */
+  const getHint = (): JSX.Element | null => {
+    if ( formRowsDynamicCollection[id].isCorrect === false ) {
+      return <span className={css(styles.formHint)}>{hint}</span>;
+    } else {
+      return null;
+    }
+  }
+
+  /* Отправляет в reducer введенные в поле символы */
+  const updateInputHandler = (e) => {
+    addValueInDynamicCollection({
+      id: id,
+      value: e.currentTarget.value,
+      isCorrect: undefined,
+    });
+  }
+
+  /* Обработчик события редактирования поля формы */
+  const fieldHandler = (e) => {
+    if ( regExpTemplate.test(e.target.value) ) {
+      addValueInDynamicCollection({
+        id: id,
+        value: e.target.value,
+        isCorrect: true,
+      });
+    } else {
+      addValueInDynamicCollection({
+        id: id,
+        value: e.target.value,
+        isCorrect: false,
+      });
+    }
+  }
 
   return (
     <div className={css(styles.formRow)}>
@@ -54,9 +137,9 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
           {label}
       </label>
       {/* Элемент формы */
-        getInput()
-      /* Подсказка в случае ввода некорректных данных */
-
+        getFormElement()}
+      {/* Подсказка в случае ввода некорректных данных */
+        getHint()
       }
     </div>
   );

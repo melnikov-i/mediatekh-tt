@@ -11,7 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  addValueIntoDynamicCollection: actionCreators.addValueIntoDynamicCollection,
+  addValueInDynamicCollection: actionCreators.addValueInDynamicCollection,
 }, dispatch);
 
 export const SFCFormRowConnected =

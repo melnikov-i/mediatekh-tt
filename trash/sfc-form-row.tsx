@@ -26,6 +26,7 @@ export interface SFCFormRowProps {
   filledField: (payload: IFilledField) => any, // Для передачи значений в Store
 }
 
+
 /* Компонент */
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   /* Деструктуризация данных, полученных от родительского компонента */
