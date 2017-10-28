@@ -5,10 +5,13 @@ import { css } from 'aphrodite/no-important';
 /* Импорт интерфейсов */
 import {
   IFormRowsStaticParamsModel,
+  IFormRowsDynamicParamsModel,
+  IFormRowsDynamicDispatchModel,
 } from '@src/models';
 
 /* Импорт дочернего компонента */
-import SFCFormRowConnected from '@src/connected/sfc-form-row-connected.usage';
+import SFCFormRowConnected from 
+'@src/connected/sfc-form-row-connected.usage';
 
 /* Импорт стилей */
 import styles from '@src/styles/form-styles';
@@ -16,23 +19,60 @@ import errors from '@src/styles/error-styles';
 
 /* Интерфейс передаваемых в интерфейс параметров */
 export interface SFCFormProps {
-  formRowsStaticCollection: IFormRowsStaticParamsModel[], // Прокидывается в дочерний компонент
-  addFilledFieldsInUserCollection: (payload: boolean) => any,
+  formRowsStaticCollection: IFormRowsStaticParamsModel[],
+  formRowsDynamicCollection: IFormRowsDynamicParamsModel
+  addFilledFieldsInUserCollection: 
+  (payload: IFormRowsDynamicParamsModel) => any,
+  addValueInDynamicCollection: 
+  (payload: IFormRowsDynamicDispatchModel) => any,
 }
 
 
 /* Компонент */
 export const SFCForm: React.SFC<SFCFormProps> = (props) => {
-  /* Деструктуризация props, в котором лежит коллекция всех полей формы */
+  /* Деструктуризация props, в котором лежит коллекция полей формы */
   const { 
     formRowsStaticCollection,
-    addFilledFieldsInUserCollection
   } = props;
 
   /* Обработчик события нажатия кнопки "Добавить" */
   const formButtonHandler = (e) => {
     e.preventDefault();
-    addFilledFieldsInUserCollection(true);
+    const {
+      formRowsDynamicCollection,
+      addValueInDynamicCollection,
+      addFilledFieldsInUserCollection,
+    } = props;
+
+    if ( formRowsDynamicCollection['active'].isCorrect === undefined ) {
+      addValueInDynamicCollection({
+        id: 'active',
+        value: '1',
+        isCorrect: true,
+      });
+    }
+
+    let valid: boolean = true;
+
+    for ( let i in formRowsDynamicCollection ) {
+      if ( i !== 'active' ) {
+        if ( formRowsDynamicCollection[i].isCorrect === undefined ) {
+          valid = false;
+          addValueInDynamicCollection({
+            id: i,
+            value: '',
+            isCorrect: false,
+          });
+        } else if ( formRowsDynamicCollection[i].isCorrect === false ) {
+          valid = false;
+        }
+      }
+    }
+
+    if ( valid ) {
+      addFilledFieldsInUserCollection(formRowsDynamicCollection);
+    }
+
   }
   
   /* Проверка содержимого коллекции */

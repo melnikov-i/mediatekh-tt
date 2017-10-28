@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {
-  // IUser,
+  IUser,
   IFormRowsStaticParamsModel, // Импорт модели статических данных формы
   IFormRowsDynamicParamsModel, // Импорт модели динамических данных формы
 } from '@src/models';
@@ -17,7 +17,7 @@ import {
 export type State = {
   readonly formRowsStaticCollection: IFormRowsStaticParamsModel[], // Статические данные формы
   readonly formRowsDynamicCollection: IFormRowsDynamicParamsModel, // Динамические данные формы
-  // readonly userCollection: IUser[],
+  readonly userCollection: IUser[],
 }
 
 export const reducer = combineReducers<State>({
@@ -55,81 +55,26 @@ export const reducer = combineReducers<State>({
   userCollection: ( state = [], action ) => {
     switch ( action.type ) {
       case ADD_FILLED_FIELDS_IN_USER_COLLECTION:
-        console.log(action.payload);
-        return state;
+        const typingPayload = 
+        (payload: IFormRowsDynamicParamsModel) => {
+          return {
+            first_name: payload['first_name'].value,
+            last_name: payload['last_name'].value,
+            active: ( payload['active'].value == '1' ) ? true : false,
+            age: Number(payload['age'].value),
+            login: payload['login'].value,
+            password: payload['password'].value,
+            role: Number(payload['role'].value),
+            registered_on: new Date(),
+          }
+        };
+        console.log(state);
+        return [
+          ...state,
+          typingPayload(action.payload),
+        ];
       default:
         return state;
     }
   }
-
-
-  // CLEAR_FIELD,
-  // ADD_USER_IN_COLLECTION,
-
-  // filledFieldsCollection: (state = [], action) => {
-  //   switch ( action.type ) {
-  //     case FILLED_FIELD:
-  //       /* Преобразование типов полей входных данных */
-  //       const typedPayload = (payload: IFilledField): IFilledField => {
-  //         const matchingValue = (htmlId: string, value: any): string | boolean | number => {
-  //           switch ( htmlId ) {
-  //             case 'active': return ( value == '1' ) ? true : false;
-  //             case 'age': return value * 1;
-  //             case 'role': return value * 1;
-  //             case 'registered_on': return value * 1;
-  //             default: return value + '';
-  //           }
-  //         }
-  //         return {
-  //           htmlId: payload.htmlId,
-  //           isCorrect: payload.isCorrect,
-  //           value: matchingValue(payload.htmlId, payload.value)
-  //         };
-  //       }
-  //       if ( state.length != 0 ) {
-  //         // state содержит данные. Есть ли среди них payload?
-  //         // 1. Проверить наличие payload в state
-  //         const isContain = (): {answer: boolean, index: string } => {
-  //           let answer: boolean = false;
-  //           let index: string = '';
-  //           for ( let i in state ) {
-  //             if ( state[i].htmlId == action.payload.htmlId ) {
-  //               answer = true;
-  //               index = i;
-  //             }
-  //           }
-  //           return {answer, index};
-  //         };
-  //         const contain: {answer: boolean, index: string} = isContain();
-          
-  //         if ( contain.answer ) {
-  //           /* В state есть payload */
-  //           let current: IFilledField[] = state.map((e, i) => {
-  //             if ( i == contain.index )
-  //               return typedPayload(action.payload);
-  //             return e;
-  //           });
-  //           return current;
-  //         } else {
-  //           /* В state нет payload, добавить */
-  //           return [...state, typedPayload(action.payload)];
-  //         }
-  //       } else {
-  //         // state - пустой массив. Добавление к нему payload
-  //         return [...state, typedPayload(action.payload)];
-  //       }
-  //     case CLEAR_FIELD:
-  //       return [];
-  //     default:
-  //       return state;
-  //   }
-  // },
-  // userCollection: (state = [], action) => {
-  //   switch ( action.type ) {
-  //     case ADD_USER_IN_COLLECTION:
-  //       return [...state, action.payload];
-  //     default: 
-  //       return state;
-  //   }
-  // },
 });

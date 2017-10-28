@@ -14,9 +14,9 @@ import errors from '@src/styles/error-styles';
 
 /* Интерфейс передаваемых в компонент параметров */
 export interface SFCFormRowProps {
-  items: IFormRowsStaticParamsModel, // Получены от родительского компонента
+  items: IFormRowsStaticParamsModel,
   formRowsDynamicCollection: IFormRowsDynamicParamsModel,
-  addValueInDynamicCollection: (payload: IFormRowsDynamicDispatchModel) => any
+  addValueInDynamicCollection: (payload: IFormRowsDynamicDispatchModel) => any,
 }
 
 
@@ -24,10 +24,8 @@ export interface SFCFormRowProps {
 export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   const { id, label, type, hint, regExpTemplate } = props.items;
   const { addValueInDynamicCollection } = props;
-  const { value, isCorrect } = props.formRowsDynamicCollection[id];
+  const { value, isCorrect } = props.formRowsDynamicCollection;
 
-  console.log(value, isCorrect);
-  
   /* Выводит сообщение об ошибке при рендеринге элемента формы */
   const getError = (): JSX.Element => (
       <span className={css(errors.errorMessage)}>
