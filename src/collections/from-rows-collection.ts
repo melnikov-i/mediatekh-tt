@@ -1,4 +1,41 @@
-import { IFormRowsStaticParamsModel } from '@src/models';
+import {
+  IFormRowsStaticParamsModel,
+  ISelectModel,
+} from '@src/models';
+
+export const ActiveSelectOptions: ISelectModel[] = [
+  {
+    value: '1',
+    label: 'Yes',
+  },
+  {
+    value: '0',
+    label: 'No'
+  },
+];
+
+export const RoleSelectOptions: ISelectModel[] = [
+  {
+    value: '0',
+    label: 'Choose',
+  },
+  {
+    value: '1',
+    label: 'Administrator',
+  },
+  {
+    value: '2',
+    label: 'Technician',
+  },
+  {
+    value: '3',
+    label: 'Manager',
+  },
+  {
+    value: '4',
+    label: 'Supervisor',
+  },
+];
 
 export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
   {
@@ -19,16 +56,7 @@ export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
     type: 'select',
     regExpTemplate: /^[01]{1}$/,
     hint: '',
-    selectOptions: [
-      {
-        value: '1',
-        label: 'Yes',
-      },
-      {
-        value: '0',
-        label: 'No'
-      },
-    ],
+    selectOptions: ActiveSelectOptions,
   }, {
     id: 'age',
     label: 'Возраст',
@@ -53,27 +81,7 @@ export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
     type: 'select',
     regExpTemplate: /^[1-4]{1}$/,
     hint: 'Выберите',
-    selectOptions: [
-      {
-        value: '0',
-        label: 'Choose',
-      },
-      {
-        value: '1',
-        label: 'Administrator',
-      },
-      {
-        value: '2',
-        label: 'Technician',
-      },
-      {
-        value: '3',
-        label: 'Manager',
-      },
-      {
-        value: '4',
-        label: 'Supervisor',
-      }
-    ],
+    selectOptions: RoleSelectOptions,
   }
 ];
+

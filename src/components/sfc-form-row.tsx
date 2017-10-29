@@ -16,7 +16,8 @@ import errors from '@src/styles/error-styles';
 export interface SFCFormRowProps {
   items: IFormRowsStaticParamsModel,
   formRowsDynamicCollection: IFormRowsDynamicParamsModel,
-  addValueInDynamicCollection: (payload: IFormRowsDynamicDispatchModel) => any,
+  addValueInDynamicCollection: 
+  (payload: IFormRowsDynamicDispatchModel) => any,
 }
 
 

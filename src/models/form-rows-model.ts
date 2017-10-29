@@ -23,3 +23,8 @@ export interface ISelectModel {
   value: string,
   label: string,
 }
+
+export interface IOptionsModel {
+  role: ISelectModel,
+  active: ISelectModel,
+}

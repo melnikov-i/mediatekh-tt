@@ -21,12 +21,12 @@ export type State = {
 }
 
 export const reducer = combineReducers<State>({
-  /* Отдаем компоненту статические параметры строки */
+  /* Статические параметры строки формы */
   formRowsStaticCollection: (state = FormRowsCollection, action) => {
     return state;
   },
   
-  /* Динамически изменяемые данные формы */
+  /* Динамически изменяемые данные строки формы */
   formRowsDynamicCollection: (state = {}, action) => {
     switch ( action.type ) {
       case ADD_VALUE_IN_DYNAMIC_COLLECTION:

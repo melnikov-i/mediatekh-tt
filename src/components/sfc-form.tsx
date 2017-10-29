@@ -20,7 +20,7 @@ import errors from '@src/styles/error-styles';
 /* Интерфейс передаваемых в интерфейс параметров */
 export interface SFCFormProps {
   formRowsStaticCollection: IFormRowsStaticParamsModel[],
-  formRowsDynamicCollection: IFormRowsDynamicParamsModel
+  formRowsDynamicCollection: IFormRowsDynamicParamsModel,
   addFilledFieldsInUserCollection: 
   (payload: IFormRowsDynamicParamsModel) => any,
   addValueInDynamicCollection: 
@@ -44,13 +44,6 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
       addFilledFieldsInUserCollection,
     } = props;
 
-    if ( formRowsDynamicCollection['active'].isCorrect === undefined ) {
-      addValueInDynamicCollection({
-        id: 'active',
-        value: '1',
-        isCorrect: true,
-      });
-    }
 
     let valid: boolean = true;
 
@@ -65,6 +58,14 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
           });
         } else if ( formRowsDynamicCollection[i].isCorrect === false ) {
           valid = false;
+        }
+      } else {
+        if ( formRowsDynamicCollection['active'].isCorrect === undefined ) {
+          addValueInDynamicCollection({
+            id: 'active',
+            value: '1',
+            isCorrect: true,
+          });
         }
       }
     }
