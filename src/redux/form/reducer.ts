@@ -9,9 +9,13 @@ import {
 /* Импорт статических данных формы */
 import { FormRowsCollection } from '@src/collections';
 
+/* Временный импорт шаблона */
+import { UserCollectionTemplate } from '@src/collections/template';
+
 import {
   ADD_VALUE_IN_DYNAMIC_COLLECTION,
   ADD_FILLED_FIELDS_IN_USER_COLLECTION,
+  SORTING_FIELDS_IN_USER_COLLECTION,
 } from './';
 
 export type State = {
@@ -23,6 +27,7 @@ export type State = {
 export const reducer = combineReducers<State>({
   /* Статические параметры строки формы */
   formRowsStaticCollection: (state = FormRowsCollection, action) => {
+    console.log('formRowsStaticCollection:', state);
     return state;
   },
   
@@ -38,21 +43,27 @@ export const reducer = combineReducers<State>({
           }
         };
       default:
-        let newState = {...state};
+        let newState:IFormRowsDynamicParamsModel = {};
         for ( let i in FormRowsCollection ) {
+          let defaultValue: string = '';
+          switch ( FormRowsCollection[i].id ) {
+            case 'active': defaultValue = '1'; break;
+            case 'role': defaultValue = '0'; break;
+          }
           newState = {
             ...newState,
             [FormRowsCollection[i].id]: {
-              value: '',
+              value: defaultValue,
               isCorrect: undefined,  
-            }
-          }
+            },
+          };
         }
+        console.log('formRowsDynamicCollection:', newState);
         return newState;
     }
   },
 
-  userCollection: ( state = [], action ) => {
+  userCollection: ( state = UserCollectionTemplate/*[]*/, action ) => {
     switch ( action.type ) {
       case ADD_FILLED_FIELDS_IN_USER_COLLECTION:
         const typingPayload = 
@@ -68,12 +79,17 @@ export const reducer = combineReducers<State>({
             registered_on: new Date(),
           }
         };
-        console.log(state);
         return [
           ...state,
           typingPayload(action.payload),
         ];
+      case SORTING_FIELDS_IN_USER_COLLECTION:
+        // const doSorting = () => {
+
+        // }
+        return state;
       default:
+        console.log('userCollection State:', state);
         return state;
     }
   }

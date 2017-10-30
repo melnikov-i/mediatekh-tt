@@ -73,7 +73,6 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
     if ( valid ) {
       addFilledFieldsInUserCollection(formRowsDynamicCollection);
     }
-
   }
   
   /* Проверка содержимого коллекции */
@@ -81,6 +80,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
     /* В случае успеха генерирует поля формы */
     return (
       <form action={''}>
+        {console.log('[FORM]')}
         {/* Поля формы */
           formRowsStaticCollection.map((item) => {
             return (
@@ -91,7 +91,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
             );
           })
         }
-        {/* Кнопка формы */console.log('[RENDER]')}
+        {/* Кнопка формы */}
         <div className={css(styles.formButtonWrapper)}>
           <button
             className={css(styles.formButton)}

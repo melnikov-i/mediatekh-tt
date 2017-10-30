@@ -28,18 +28,21 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
   const length: number = userCollection.length;
 
   /* Формирование ячейки шапки таблицы */
-  const tableHeadCell = ( length: number, item: string, index: number ): JSX.Element => {
+  const tableHeadCell = 
+  ( length: number, item: string, index: number ): JSX.Element => {
     if ( length > 1 ) {
       return (
         <td key={index} className={css(styles.tableCell)}>
           {item}
           <a href="">
-            <span className={css(styles.tableSortUp)}>
-            </span>
+            <span
+              className={css(styles.tableSortUp)}
+              onClick={handlerUp}></span>
           </a>
           <a href="">
-            <span className={css(styles.tableSortDown)}>
-            </span>
+            <span 
+              className={css(styles.tableSortDown)}
+              onClick={handlerDown}></span>
           </a>
         </td>
       );
@@ -51,6 +54,18 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
       );
     }
   };
+
+  const handlerUp = (e) => {
+    e.preventDefault();
+    console.log('sortingUp:', 
+      e.currentTarget.parentNode.previousSibling.previousSibling);
+  }
+
+  const handlerDown = (e) => {
+    e.preventDefault();
+    console.log('sortingDown:', 
+      e.currentTarget.parentNode.parentNode.textContent);
+  }
 
   /* Формирование ячеек тела таблицы */
   const tableBodyCells = ( user: IUser, index: number ): JSX.Element => {
@@ -68,17 +83,12 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     /* Получение Active в виде текста */
     const getStringFromBoolean = ( b: boolean ): string => {
       const { active } = props.options;
-      console.log(active);
       let key: string = '0';
-      
       if ( b ) {
         key = '1';
-      } 
-
+      }
       for ( let i in active ) {
         if ( active[i].value == key ) {
-          console.log('value', active[i].value);
-          console.log('label', active[i].label);
           return active[i].label;
         }
       }
@@ -98,7 +108,7 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
       out += ( minutes.length < 2 ) ? '0' + minutes : minutes;
       return out;
     }
-
+    console.log('[TABLE_ROW]')
     return (
       <tr key={index}>
         <td className={css(styles.tableCell)}>
@@ -123,16 +133,21 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     );
   }
   
-  if ( length !== 0 ) { // не забудь изменить условие
+  if ( length !== 0 ) {
+    console.log('[TABLE]');
     return (
       <table className={css(styles.table)}>
         <thead>
           <tr>
-            {tableHeadCollection.map((item, index) => (tableHeadCell(0, item, index)))}
+            {tableHeadCollection.map((item, index) => (
+              tableHeadCell(length, item, index))
+            )}
           </tr>
         </thead>
         <tbody>
-          {userCollection.map((user, index) => (tableBodyCells(user, index)))}
+          {userCollection.map((user, index) => (
+            tableBodyCells(user, index))
+          )}
         </tbody>
       </table>
     );
@@ -140,26 +155,3 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     return null;
   }
 };
-
- // onClick={handlerUp}
-  // onClick={handlerDown}
-
-      //   <tbody>
-      //   {
-      //     tableRowsCollection.map((row, i) => {
-      //       return (
-      //         <tr key={i}>
-      //           {
-      //             row.map((cell, i) => {
-      //               return (
-      //                 <td key={i} className={css(styles.tableCell)}>
-      //                   {cell}
-      //                 </td>
-      //               );
-      //             })
-      //           }
-      //         </tr>
-      //       );
-      //     })
-      //   }
-      // </tbody>

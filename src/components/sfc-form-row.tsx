@@ -51,7 +51,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
         className={css(styles.formInput, getCurrentStyle())}
         name={id}
         id={id}
-        onChange={updateInputHandler}
+        onChange={updateValueHandler}
         onBlur={fieldHandler}
         value={value}
       />
@@ -64,6 +64,8 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
     if ( selectOptions !== undefined && selectOptions.length != 0 ) {
       return (
         <select
+          onChange={updateValueHandler}
+          value={value}
           className={css(styles.formSelect, getCurrentStyle())}
           id={id}
           onBlur={fieldHandler}>
@@ -105,7 +107,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
   }
 
   /* Отправляет в reducer введенные в поле символы */
-  const updateInputHandler = (e) => {
+  const updateValueHandler = (e) => {
     addValueInDynamicCollection({
       id: id,
       value: e.currentTarget.value,
@@ -132,7 +134,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   return (
     <div className={css(styles.formRow)}>
-      {/* Метка поля */console.log('render:', id)}
+      {/* Метка поля */console.log('[FORM_FIELD]:', id)}
       <label
         htmlFor={id}
         className={css(styles.formLabel)}>

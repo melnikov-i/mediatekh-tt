@@ -1,22 +1,22 @@
-import { ISelectModel } from '@src/models';
+// import { ISelectModel } from '@src/models';
 
-export const ADD_SELECT_OPTIONS_VALUES_TO_TABLE = 'ADD_SELECT_OPTIONS_VALUES_TO_TABLE';
+// export const ADD_SELECT_OPTIONS_VALUES_TO_TABLE = 'ADD_SELECT_OPTIONS_VALUES_TO_TABLE';
 
-export type Actions = {
-  ADD_SELECT_OPTIONS_VALUES_TO_TABLE: {
-    type: typeof ADD_SELECT_OPTIONS_VALUES_TO_TABLE,
-    payload: {id: string, selectOptions: ISelectModel[]},
-  },
-};
+// export type Actions = {
+//   ADD_SELECT_OPTIONS_VALUES_TO_TABLE: {
+//     type: typeof ADD_SELECT_OPTIONS_VALUES_TO_TABLE,
+//     payload: {id: string, selectOptions: ISelectModel[]},
+//   },
+// };
 
-// Action Creators
-export const actionCreators = {
-  addSelectOptionsValuesToTable:
-  ( payload: {id: string, selectOptions: ISelectModel[]} ):
-  Actions[typeof ADD_SELECT_OPTIONS_VALUES_TO_TABLE] => ({
-    type: ADD_SELECT_OPTIONS_VALUES_TO_TABLE, payload,
-  }),
-};
+// // Action Creators
+// export const actionCreators = {
+//   addSelectOptionsValuesToTable:
+//   ( payload: {id: string, selectOptions: ISelectModel[]} ):
+//   Actions[typeof ADD_SELECT_OPTIONS_VALUES_TO_TABLE] => ({
+//     type: ADD_SELECT_OPTIONS_VALUES_TO_TABLE, payload,
+//   }),
+// };
 
 
 
