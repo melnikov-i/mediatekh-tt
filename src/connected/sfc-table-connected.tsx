@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 
 // import { RootState/*, Dispatch*/ } from '@src/redux';
 import {
-  tableHeadCollectionSelector,
   userCollectonSelector,
   optionsSelector,
 } from '@src/selectors';
@@ -12,9 +11,8 @@ import {
 import { SFCTable } from '@src/components';
 
 const mapStateToProps = createStructuredSelector({
-  tableHeadCollection: tableHeadCollectionSelector,
   userCollection: userCollectonSelector,
-  options: optionsSelector
+  options: optionsSelector,
 });
 
 // const mapStateToProps = ( state: RootState ) => ({
