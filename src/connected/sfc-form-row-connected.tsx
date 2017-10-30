@@ -5,6 +5,7 @@ import { RootState, Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/form';
 import { SFCFormRow } from '@src/components';
 import { IFormRowsStaticParamsModel } from '@src/models';
+import { formRowsDynamicCollectionSelector } from '@src/selectors';
 
 export interface SFCFormRowConnected {
   items: IFormRowsStaticParamsModel,
@@ -13,7 +14,8 @@ export interface SFCFormRowConnected {
 const mapStateToProps = 
 (state: RootState, ownProps: SFCFormRowConnected) => ({
   formRowsDynamicCollection: 
-    state.form.formRowsDynamicCollection[ownProps.items.id],
+    formRowsDynamicCollectionSelector(state, ownProps),
+    //state.form.formRowsDynamicCollection[ownProps.items.id],
 });
 
 const mapDispatchToProps = 

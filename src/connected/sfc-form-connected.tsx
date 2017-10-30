@@ -4,10 +4,16 @@ import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/form';
 import { SFCForm } from '@src/components';
+import {
+  formRowsDynamicCollectionFormSelector,
+  formRowsStaticCollectionSelector,
+} from '@src/selectors';
 
 const mapStateToProps = (state: RootState) => ({
-  formRowsStaticCollection: state.form.formRowsStaticCollection,
-  formRowsDynamicCollection: state.form.formRowsDynamicCollection,
+  formRowsStaticCollection: formRowsStaticCollectionSelector(state),
+  //state.form.formRowsStaticCollection,
+  formRowsDynamicCollection: formRowsDynamicCollectionFormSelector(state),
+  //state.form.formRowsDynamicCollection,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
