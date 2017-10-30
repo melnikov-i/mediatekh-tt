@@ -1,7 +1,8 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-import { RootState, Dispatch } from '@src/redux';
+import { /*RootState, */Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/form';
 import { SFCForm } from '@src/components';
 import {
@@ -9,12 +10,17 @@ import {
   formRowsStaticCollectionSelector,
 } from '@src/selectors';
 
-const mapStateToProps = (state: RootState) => ({
-  formRowsStaticCollection: formRowsStaticCollectionSelector(state),
-  //state.form.formRowsStaticCollection,
-  formRowsDynamicCollection: formRowsDynamicCollectionFormSelector(state),
-  //state.form.formRowsDynamicCollection,
+const mapStateToProps = createStructuredSelector({
+  formRowsStaticCollection: formRowsStaticCollectionSelector,
+  formRowsDynamicCollection: formRowsDynamicCollectionFormSelector,
 });
+
+// const mapStateToProps = (state: RootState) => ({
+  // formRowsStaticCollection: formRowsStaticCollectionSelector(state),
+  //state.form.formRowsStaticCollection,
+  // formRowsDynamicCollection: formRowsDynamicCollectionFormSelector(state),
+  //state.form.formRowsDynamicCollection,
+// });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   addFilledFieldsInUserCollection: 
