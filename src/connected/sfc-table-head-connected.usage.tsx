@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { SFCTableHeadConencted } from '@src/connected';
+import { SFCTableHeadConnected } from '@src/connected';
 
 export default () => (
-  <SFCTableHeadConencted />
+  <SFCTableHeadConnected />
 );

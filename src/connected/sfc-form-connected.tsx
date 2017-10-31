@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { /*RootState, */Dispatch } from '@src/redux';
-import { actionCreators } from '@src/redux/form';
+import { actionCreators as formActionCreators } from '@src/redux/form';
+import { actionCreators as tableActionCreators } from '@src/redux/table';
 import { SFCForm } from '@src/components';
 import {
   formRowsDynamicCollectionFormSelector,
@@ -24,9 +25,9 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   addFilledFieldsInUserCollection: 
-    actionCreators.addFilledFieldsInUserCollection,
+    tableActionCreators.addFilledFieldsInUserCollection,
   addValueInDynamicCollection: 
-    actionCreators.addValueInDynamicCollection,
+    formActionCreators.addValueInDynamicCollection,
 }, dispatch);
 
 export const SFCFormConnected =

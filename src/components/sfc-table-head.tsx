@@ -11,10 +11,11 @@ import styles from '@src/styles/table-styles';
 
 export interface SFCTableHeadProps {
   tableHeadCollection: ITableRow,
+  userCollectionLength: number,
 }
 
 export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
-  const { tableHeadCollection } = props;
+  const { tableHeadCollection, userCollectionLength } = props;
   
   const handlerUp = (e) => {
     e.preventDefault();
@@ -28,27 +29,44 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
       e.currentTarget.parentNode.parentNode.textContent);
   }
 
-  return (
-    <thead>
-      {
-        tableHeadCollection.map((item, index) => {
-          return (
-            <td key={index} className={css(styles.tableCell)}>
-              {item}
-              <a href="">
-                <span
-                  className={css(styles.tableSortUp)}
-                  onClick={handlerUp}></span>
-              </a>
-              <a href="">
-                <span 
-                  className={css(styles.tableSortDown)}
-                  onClick={handlerDown}></span>
-              </a>
-            </td>
-          );
-        })
-      }
-    </thead>
-  );
+  if ( userCollectionLength > 1 ) {
+    console.log('[TABLE_HEAD]');
+    return (
+      <tr>
+        {
+          tableHeadCollection.map((item, index) => {
+            return (
+              <td key={index} className={css(styles.tableCell)}>
+                {item}
+                <a href="">
+                  <span
+                    className={css(styles.tableSortUp)}
+                    onClick={handlerUp}></span>
+                </a>
+                <a href="">
+                  <span 
+                    className={css(styles.tableSortDown)}
+                    onClick={handlerDown}></span>
+                </a>
+              </td>
+            );
+          })
+        }
+      </tr>
+    );
+  } else {
+    return (
+      <tr>
+        {
+          tableHeadCollection.map((item, index) => {
+            return (
+              <td key={index} className={css(styles.tableCell)}>
+                {item}
+              </td>
+            );
+          })
+        }
+      </tr>
+    );
+  }
 }
