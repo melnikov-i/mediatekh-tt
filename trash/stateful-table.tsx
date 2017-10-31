@@ -120,43 +120,43 @@ export const StatefulTable: React.ComponentClass<StatefulTableProps> =
 
 
 
-    // doSort(tableRows: ITableRow[], field: string, direction: boolean, callback: any) {
-    //   let i: number = 0;
-    //   const length: number = row.length;
-    //   if ( length > 0 ) {
-    //     while ( i < length ) {
-    //       let j = i + 1;
-    //       const currentDirection: boolean = callback(row[i][field], row[j][field]);
-    //       if ( currentDirection  == direction ) {
-    //         i++;
-    //       } else {
-    //         if ( row[i][field] != row[j][field] ) {
-    //           let tmp = row[j];
-    //           row[j] = row[i];
-    //           row[i] = tmp;
-    //           if ( i != 0 ) i--;
-    //         } else {
-    //           i++;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    // doSort(field: string, direction: boolean, callback: any) {
+      let i: number = 0;
+      const length: number = row.length;
+      if ( length > 0 ) {
+        while ( i < length ) {
+          let j = i + 1;
+          const currentDirection: boolean = callback(row[i][field], row[j][field]);
+          if ( currentDirection  == direction ) {
+            i++;
+          } else {
+            if ( row[i][field] != row[j][field] ) {
+              let tmp = row[j];
+              row[j] = row[i];
+              row[i] = tmp;
+              if ( i != 0 ) i--;
+            } else {
+              i++;
+            }
+          }
+        }
+      }
+    }
 
-    // callbackString(a: string, b: string): boolean {
-    //   const endOfWhile: number = ( a.length < b.length ) ? a.length : b.length;
-    //   let i: number = 0;
-    //   while ( i < endOfWhile ) {
-    //     if ( a[i] == b[i] ) {
-    //       i++;
-    //     } else {
-    //       if ( a[i] < b[i] ) return true;
-    //       else return false;
-    //     }
-    //   }
-    //   if ( a.length < b.length || a.length == b.length ) return true;
-    //   else return false;
-    // }
+    callbackString(a: string, b: string): boolean {
+      const endOfWhile: number = ( a.length < b.length ) ? a.length : b.length;
+      let i: number = 0;
+      while ( i < endOfWhile ) {
+        if ( a[i] == b[i] ) {
+          i++;
+        } else {
+          if ( a[i] < b[i] ) return true;
+          else return false;
+        }
+      }
+      if ( a.length < b.length || a.length == b.length ) return true;
+      else return false;
+    }
 
     // callbackBoolean(a, b) {
     //   if ( b ) return a;

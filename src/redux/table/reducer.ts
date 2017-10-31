@@ -5,6 +5,7 @@ import {
   IUser,
   ITableRow,
   ISelectModel,
+  ISortingParamsModel,
   IFormRowsDynamicParamsModel,
 } from '@src/models';
 
@@ -20,7 +21,7 @@ import { UserCollectionTemplate } from '@src/collections/template';
 
 import {
   ADD_FILLED_FIELDS_IN_USER_COLLECTION,
-  // SORTING_FIELDS_IN_USER_COLLECTION,
+  SORTING_FIELDS_IN_USER_COLLECTION,
 } from './';
 
 export type State = {
@@ -28,6 +29,7 @@ export type State = {
   readonly roleSelectCollection: ISelectModel[],
   readonly activeSelectCollection: ISelectModel[],
   readonly userCollection: IUser[],
+  readonly sortingParams: ISortingParamsModel,
 }
 
 
@@ -56,13 +58,21 @@ export const reducer = combineReducers<State>({
           ...state,
           typingPayload(action.payload),
         ];
-      // case SORTING_FIELDS_IN_USER_COLLECTION:
+      case SORTING_FIELDS_IN_USER_COLLECTION:
         // const doSorting = () => {
 
         // }
-        // return state;
+        return [...state];
       default:
         return state;
     }
-  }  
+  },
+
+  sortingParams: ( state = {field: 'login', direction: true}, action ) => {
+    switch ( action.type ) {
+      default:
+        console.log('sortingParams:', state);
+        return state;
+    }
+  }
 })

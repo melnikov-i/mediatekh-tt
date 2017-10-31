@@ -1,4 +1,6 @@
-import { ITableRow } from '@src/models';
+import {
+  ITableRow,
+} from '@src/models';
 
 export const TableHeadCollection: ITableRow = [
   'Role',
