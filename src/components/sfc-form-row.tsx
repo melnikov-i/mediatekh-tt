@@ -108,6 +108,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   /* Отправляет в reducer введенные в поле символы */
   const updateValueHandler = (e) => {
+    e.preventDefault();
     addValueInDynamicCollection({
       id: id,
       value: e.currentTarget.value,
@@ -117,6 +118,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   /* Обработчик события редактирования поля формы */
   const fieldHandler = (e) => {
+    e.preventDefault();
     if ( regExpTemplate.test(e.target.value) ) {
       addValueInDynamicCollection({
         id: id,

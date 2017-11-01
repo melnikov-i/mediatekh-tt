@@ -31,4 +31,14 @@ export const UserCollectionTemplate: IUser[] = [
     role: 3,
     registered_on: 1509364992596,
   },
+  {
+    first_name: 'Helen',
+    last_name: 'Deepneau',
+    active: true,
+    age: 23,
+    login: 'deepneau',
+    password: 'edisfuckingbustard',
+    role: 4,
+    registered_on: 1509364992596,
+  },
 ];

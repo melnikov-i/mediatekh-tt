@@ -1,6 +1,7 @@
 import {
-  IFormRowsStaticParamsModel,
   ISelectModel,
+  IFormRowsStaticParamsModel,
+  IFormRowsDynamicParamsModel,
 } from '@src/models';
 
 export const ActiveSelectOptions: ISelectModel[] = [
@@ -85,3 +86,25 @@ export const FormRowsCollection: IFormRowsStaticParamsModel[] = [
   }
 ];
 
+const doFormRowsDynamicCollection = 
+(FormRowsCollection: IFormRowsStaticParamsModel[]): IFormRowsDynamicParamsModel => {
+  let out = {};
+  for ( let i in FormRowsCollection ) {
+    let defaultValue: string = '';
+    switch ( FormRowsCollection[i].id ) {
+      case 'active': defaultValue = '1'; break;
+      case 'role': defaultValue = '0'; break;
+    }
+    out = {
+      ...out,
+      [FormRowsCollection[i].id]: {
+        value: defaultValue,
+        isCorrect: undefined,  
+      },
+    };
+  }
+  return out;
+};
+
+export const FormRowsDynamicCollection = 
+  doFormRowsDynamicCollection(FormRowsCollection);

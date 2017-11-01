@@ -2,26 +2,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { /*RootState, */Dispatch } from '@src/redux';
+import { Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/form';
 import { SFCFormRow } from '@src/components';
-import { IFormRowsStaticParamsModel } from '@src/models';
 import { formRowsDynamicCollectionSelector } from '@src/selectors';
 
-export interface SFCFormRowConnected {
-  items: IFormRowsStaticParamsModel,
-}
 
 const mapStateToProps = createStructuredSelector({
   formRowsDynamicCollection: formRowsDynamicCollectionSelector,
 })
-
-// const mapStateToProps = 
-// (state: RootState, ownProps: SFCFormRowConnected) => ({
-//   formRowsDynamicCollection: 
-//     formRowsDynamicCollectionSelector(state, ownProps),
-//     //state.form.formRowsDynamicCollection[ownProps.items.id],
-// });
 
 const mapDispatchToProps = 
 (dispatch: Dispatch) => bindActionCreators({

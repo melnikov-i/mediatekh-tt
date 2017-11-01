@@ -21,7 +21,7 @@ import { UserCollectionTemplate } from '@src/collections/template';
 
 import {
   ADD_FILLED_FIELDS_IN_USER_COLLECTION,
-  SORTING_FIELDS_IN_USER_COLLECTION,
+  ADD_SORTING_PARAMS,
 } from './';
 
 export type State = {
@@ -58,11 +58,6 @@ export const reducer = combineReducers<State>({
           ...state,
           typingPayload(action.payload),
         ];
-      case SORTING_FIELDS_IN_USER_COLLECTION:
-        // const doSorting = () => {
-
-        // }
-        return [...state];
       default:
         return state;
     }
@@ -70,9 +65,10 @@ export const reducer = combineReducers<State>({
 
   sortingParams: ( state = {field: 'login', direction: true}, action ) => {
     switch ( action.type ) {
+      case ADD_SORTING_PARAMS:
+        return {...action.payload};
       default:
-        console.log('sortingParams:', state);
         return state;
     }
-  }
+  },
 })

@@ -21,13 +21,9 @@ export interface SFCTableBodyProps {
 export const SFCTableBody: React.SFC<SFCTableBodyProps> = (props) => {
   const {
     user,
-    selectOptionsCollection,
   } = props;
 
-  console.log('select:', selectOptionsCollection);
-
   console.log('[TABLE_ROW]');
-
 
   /* Получение роли в виде текста */
   const getRoleStringFromNumber = (index: number): string => {

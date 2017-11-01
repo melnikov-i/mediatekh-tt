@@ -1,18 +1,21 @@
-import { IFormRowsDynamicParamsModel } from '@src/models';
+import {
+  ISortingParamsModel,
+  IFormRowsDynamicParamsModel,
+} from '@src/models';
 
 export const ADD_FILLED_FIELDS_IN_USER_COLLECTION = 
 'ADD_FILLED_FIELDS_IN_USER_COLLECTION';
-export const SORTING_FIELDS_IN_USER_COLLECTION =
-'SORTING_FIELDS_IN_USER_COLLECTION';
+export const ADD_SORTING_PARAMS =
+'ADD_SORTING_PARAMS';
 
 export type Actions = {
   ADD_FILLED_FIELDS_IN_USER_COLLECTION: { 
     type: typeof ADD_FILLED_FIELDS_IN_USER_COLLECTION, 
     payload: IFormRowsDynamicParamsModel, 
   },
-  SORTING_FIELDS_IN_USER_COLLECTION: {
-    type: typeof SORTING_FIELDS_IN_USER_COLLECTION,
-    payload: any,
+  ADD_SORTING_PARAMS: {
+    type: typeof ADD_SORTING_PARAMS,
+    payload: ISortingParamsModel,
   }
 };
 
@@ -23,9 +26,9 @@ export const actionCreators = {
   Actions[typeof ADD_FILLED_FIELDS_IN_USER_COLLECTION] => ({
     type: ADD_FILLED_FIELDS_IN_USER_COLLECTION, payload,
   }),
-  doSortingAFieldsInUserCollection:
-  ( payload: any ):
-  Actions[typeof SORTING_FIELDS_IN_USER_COLLECTION] => ({
-    type: SORTING_FIELDS_IN_USER_COLLECTION, payload,
+  addSortingParams:
+  ( payload: ISortingParamsModel ):
+  Actions[typeof ADD_SORTING_PARAMS] => ({
+    type: ADD_SORTING_PARAMS, payload,
   }),
 };

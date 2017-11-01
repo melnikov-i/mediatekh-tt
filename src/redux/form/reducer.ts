@@ -7,7 +7,10 @@ import {
 } from '@src/models';
 
 /* Импорт статических данных формы */
-import { FormRowsCollection } from '@src/collections';
+import {
+  FormRowsCollection,
+  FormRowsDynamicCollection,
+} from '@src/collections';
 
 import {
   ADD_VALUE_IN_DYNAMIC_COLLECTION,
@@ -26,7 +29,7 @@ export const reducer = combineReducers<State>({
   },
   
   /* Динамически изменяемые данные строки формы */
-  formRowsDynamicCollection: (state = {}, action) => {
+  formRowsDynamicCollection: (state = FormRowsDynamicCollection, action) => {
     switch ( action.type ) {
       case ADD_VALUE_IN_DYNAMIC_COLLECTION:
         return {
@@ -37,22 +40,7 @@ export const reducer = combineReducers<State>({
           }
         };
       default:
-        let newState:IFormRowsDynamicParamsModel = {};
-        for ( let i in FormRowsCollection ) {
-          let defaultValue: string = '';
-          switch ( FormRowsCollection[i].id ) {
-            case 'active': defaultValue = '1'; break;
-            case 'role': defaultValue = '0'; break;
-          }
-          newState = {
-            ...newState,
-            [FormRowsCollection[i].id]: {
-              value: defaultValue,
-              isCorrect: undefined,  
-            },
-          };
-        }
-        return newState;
+        return state;
     }
   },
 });
