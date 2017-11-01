@@ -29,6 +29,7 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
   const getFieldName = (a: string): string => {
     switch ( a ) {
       case 'full name': return 'last_name';
+      case 'registered on': return 'registered_on';
       default: return a;
     }
   }
@@ -44,13 +45,13 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
 
   const handlerDown = (e) => {
     e.preventDefault();
-console.log(e.currentTarget.parentNode.textContent.toLowerCase());
-console.log(getFieldName(e.currentTarget.parentNode.textContent.toLowerCase()));
-    // addSortingParams({
-    //   field: getFieldName(
-    //     e.currentTarget.parentNode.textContent.toLowerCase()),
-    //   direction: true,
-    // });
+// console.log(e.currentTarget.parentNode.textContent.toLowerCase());
+// console.log(getFieldName(e.currentTarget.parentNode.textContent.toLowerCase()));
+    addSortingParams({
+      field: getFieldName(
+        e.currentTarget.parentNode.textContent.toLowerCase()),
+      direction: true,
+    });
   }
 
   const sortArrowActive = ( item: string, direction: boolean ) => {

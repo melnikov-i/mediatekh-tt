@@ -38,17 +38,17 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     else return true;
   }
 
-  // const numberComparison = ( a: number, b: number ): boolean => {
-  //   if ( a < b ) return true;
-  //   else return false;
-  // }
+  const numberComparison = ( a: number, b: number ): boolean => {
+    console.log('[COMPARISON - NUMBER]');
+    if ( a < b ) return true;
+    else return false;
+  }
 
   const stringComparison = (a: string, b: string): boolean => {
     const endOfWhile: number = ( a.length < b.length ) ? a.length : b.length;
     let i: number = 0;
     while ( i < endOfWhile ) {
       if ( a[i] === b[i] ) {
-        console.log('[a[i] === b[i]] - a[i]:', a[i], '[b[i]]:', b[i]);
         i++;
       } else {
         if ( a[i] < b[i] ) return true;
@@ -63,21 +63,33 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
   }
 
   const doSort = 
-  ( userCollection: IUser[],
-  sortingParams: ISortingParamsModel,
-  callback ): IUser[] => {
+  ( userCollection: IUser[], sortingParams: ISortingParamsModel, 
+  type?: string ): IUser[] => {
     const { field, direction } = sortingParams;
     let newUserCollection: IUser[] = userCollection;
     let i: number = 0;
     const length: number = newUserCollection.length - 1;
+    let fieldType: string = '';
     if ( length > 0 ) {
+      if ( type !== 'boolean' ) {
+        fieldType = typeof(newUserCollection[i][field]);        
+      } else {
+        fieldType = 'boolean';
+      }
       while ( i < length ) {
         let j: number = i + 1;
-        console.log('[newUserCollection[i][field]]:', newUserCollection[i][field]);
-        const currentDirection: boolean = callback(
-                                            newUserCollection[i][field],
-                                            newUserCollection[j][field]
-                                          );
+        const getCurrentDirection = ( a: any, b: any, type?: string): boolean => {
+          switch ( type ) {
+            case 'number': return numberComparison(a, b);
+            case 'boolean': return booleanComparison(a, b);
+            default: return stringComparison(a, b);
+          }
+        };
+        const currentDirection: boolean = getCurrentDirection(
+            newUserCollection[i][field],
+            newUserCollection[j][field],
+            fieldType
+          );
         if ( currentDirection == direction ) {
           i++;
         } else {
@@ -100,9 +112,9 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
   };
 
   const sortedUserCollection = doSort(
-        doSort(userCollection, sortingParams, stringComparison),
+        doSort(userCollection, sortingParams),
         {field: 'active', direction: true},
-        booleanComparison
+        'boolean'
       );
     
   

@@ -16,18 +16,12 @@ const mapStateToProps = createStructuredSelector({
   formRowsDynamicCollection: formRowsDynamicCollectionFormSelector,
 });
 
-// const mapStateToProps = (state: RootState) => ({
-  // formRowsStaticCollection: formRowsStaticCollectionSelector(state),
-  //state.form.formRowsStaticCollection,
-  // formRowsDynamicCollection: formRowsDynamicCollectionFormSelector(state),
-  //state.form.formRowsDynamicCollection,
-// });
-
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   addFilledFieldsInUserCollection: 
     tableActionCreators.addFilledFieldsInUserCollection,
   addValueInDynamicCollection: 
     formActionCreators.addValueInDynamicCollection,
+  clearDynamicCollection: formActionCreators.clearDynamicCollection,
 }, dispatch);
 
 export const SFCFormConnected =

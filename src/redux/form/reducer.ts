@@ -13,6 +13,7 @@ import {
 } from '@src/collections';
 
 import {
+  CLEAR_DYNAMIC_COLLECTION,
   ADD_VALUE_IN_DYNAMIC_COLLECTION,
 } from './';
 
@@ -39,6 +40,19 @@ export const reducer = combineReducers<State>({
             isCorrect: action.payload.isCorrect,
           }
         };
+      case CLEAR_DYNAMIC_COLLECTION:
+        let newState: IFormRowsDynamicParamsModel = {...state};
+        for ( let i in newState ) {
+          newState = {
+            ...newState,
+            [i]: {
+              value: '',
+              isCorrect: undefined,
+            }
+          }
+        }
+        console.log('[CLEAR_DYNAMIC_COLLECTION]')
+        return newState;
       default:
         return state;
     }

@@ -25,6 +25,7 @@ export interface SFCFormProps {
   (payload: IFormRowsDynamicParamsModel) => any,
   addValueInDynamicCollection: 
   (payload: IFormRowsDynamicDispatchModel) => any,
+  clearDynamicCollection: () => any,
 }
 
 
@@ -39,6 +40,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
   const formButtonHandler = (e) => {
     e.preventDefault();
     const {
+      clearDynamicCollection,
       formRowsDynamicCollection,
       addValueInDynamicCollection,
       addFilledFieldsInUserCollection,
@@ -72,6 +74,7 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
 
     if ( valid ) {
       addFilledFieldsInUserCollection(formRowsDynamicCollection);
+      clearDynamicCollection();
     }
   }
   
