@@ -60,7 +60,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4598110dcc4ae5a068f4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "428d2bf4a320c00dc2ed"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -27404,6 +27404,34 @@ module.exports = __webpack_require__("./node_modules/react/lib/React.js");
 
 /***/ }),
 
+/***/ "./node_modules/redux-devtools-extension/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var compose = __webpack_require__("./node_modules/redux/es/index.js").compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
+
+/***/ }),
+
 /***/ "./node_modules/redux/es/applyMiddleware.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -28025,6 +28053,138 @@ function warning(message) {
 
 /***/ }),
 
+/***/ "./node_modules/reselect/lib/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.defaultMemoize = defaultMemoize;
+exports.createSelectorCreator = createSelectorCreator;
+exports.createStructuredSelector = createStructuredSelector;
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = defaultMemoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = exports.createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
+
+/***/ }),
+
 /***/ "./node_modules/string-hash/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28373,82 +28533,18 @@ module.exports = function(module) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormRowsCollection = [
-    {
-        id: 0,
-        htmlId: 'first_name',
-        label: 'Имя',
-        type: 'text',
-        regExpTemplate: /^.{3,15}$/,
-        hint: 'от 3 до 15 символов'
-    }, {
-        id: 1,
-        htmlId: 'last_name',
-        label: 'Фамилия',
-        type: 'text',
-        regExpTemplate: /^.{3,25}$/,
-        hint: 'от 3 до 25 символов'
-    }, {
-        id: 2,
-        htmlId: 'active',
-        label: 'Активен',
-        type: 'select',
-        regExpTemplate: /^[01]{1}$/,
-        hint: ''
-    }, {
-        id: 3,
-        htmlId: 'age',
-        label: 'Возраст',
-        type: 'text',
-        regExpTemplate: /^(5[0-5]|[2-4][0-9]|1[89])$/,
-        hint: 'от 18 до 55 лет'
-    }, {
-        id: 4,
-        htmlId: 'login',
-        label: 'Логин',
-        type: 'text',
-        regExpTemplate: /^[a-z0-9_-]+$/,
-        hint: 'a-z, 0-9, \'_\' и \'*\''
-    }, {
-        id: 5,
-        htmlId: 'password',
-        label: 'Пароль',
-        type: 'text',
-        regExpTemplate: /^.{8,}$/,
-        hint: 'Минимум 8 символов'
-    }, {
-        id: 6,
-        htmlId: 'role',
-        label: 'Роль',
-        type: 'select',
-        regExpTemplate: /^[1-4]{1}$/,
-        hint: 'Выберите'
-    }
-];
-
-
-/***/ }),
-
-/***/ "./src/collections/index.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
-tslib_1.__exportStar(__webpack_require__("./src/collections/from-rows-collection.ts"), exports);
-tslib_1.__exportStar(__webpack_require__("./src/collections/select-collection.ts"), exports);
-
-
-/***/ }),
-
-/***/ "./src/collections/select-collection.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SelectRoleCollection = [
+exports.ActiveSelectOptions = [
+    {
+        value: '1',
+        label: 'Yes',
+    },
+    {
+        value: '0',
+        label: 'No'
+    },
+];
+exports.RoleSelectOptions = [
     {
         value: '0',
         label: 'Choose',
@@ -28468,17 +28564,107 @@ exports.SelectRoleCollection = [
     {
         value: '4',
         label: 'Supervisor',
+    },
+];
+exports.FormRowsCollection = [
+    {
+        id: 'first_name',
+        label: 'Имя',
+        type: 'text',
+        regExpTemplate: /^.{3,15}$/,
+        hint: 'от 3 до 15 символов',
+    }, {
+        id: 'last_name',
+        label: 'Фамилия',
+        type: 'text',
+        regExpTemplate: /^.{3,25}$/,
+        hint: 'от 3 до 25 символов',
+    }, {
+        id: 'active',
+        label: 'Активен',
+        type: 'select',
+        regExpTemplate: /^[01]{1}$/,
+        hint: '',
+        selectOptions: exports.ActiveSelectOptions,
+    }, {
+        id: 'age',
+        label: 'Возраст',
+        type: 'text',
+        regExpTemplate: /^(5[0-5]|[2-4][0-9]|1[89])$/,
+        hint: 'от 18 до 55 лет',
+    }, {
+        id: 'login',
+        label: 'Логин',
+        type: 'text',
+        regExpTemplate: /^[a-z0-9_-]+$/,
+        hint: 'a-z, 0-9, \'_\' и \'*\'',
+    }, {
+        id: 'password',
+        label: 'Пароль',
+        type: 'text',
+        regExpTemplate: /^.{8,}$/,
+        hint: 'Минимум 8 символов',
+    }, {
+        id: 'role',
+        label: 'Роль',
+        type: 'select',
+        regExpTemplate: /^[1-4]{1}$/,
+        hint: 'Выберите',
+        selectOptions: exports.RoleSelectOptions,
     }
 ];
-exports.SelectActiveCollection = [
-    {
-        value: '1',
-        label: 'Yes',
-    },
-    {
-        value: '0',
-        label: 'No',
+var doFormRowsDynamicCollection = function (FormRowsCollection) {
+    var out = {};
+    for (var i in FormRowsCollection) {
+        var defaultValue = '';
+        switch (FormRowsCollection[i].id) {
+            case 'active':
+                defaultValue = '1';
+                break;
+            case 'role':
+                defaultValue = '0';
+                break;
+            default: defaultValue = '';
+        }
+        out = tslib_1.__assign({}, out, (_a = {}, _a[FormRowsCollection[i].id] = {
+            value: defaultValue,
+            isCorrect: undefined,
+        }, _a));
     }
+    return out;
+    var _a;
+};
+exports.FormRowsDynamicCollection = doFormRowsDynamicCollection(exports.FormRowsCollection);
+
+
+/***/ }),
+
+/***/ "./src/collections/index.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+tslib_1.__exportStar(__webpack_require__("./src/collections/from-rows-collection.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/collections/table-header-collection.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/collections/table-header-collection.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TableHeadCollection = [
+    'Role',
+    'Login',
+    'Full name',
+    'Age',
+    'Registered on',
+    'Active',
 ];
 
 
@@ -28491,93 +28677,11 @@ exports.SelectActiveCollection = [
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
-tslib_1.__exportStar(__webpack_require__("./src/components/stateful-form.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/components/sfc-form.tsx"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/components/sfc-form-row.tsx"), exports);
-tslib_1.__exportStar(__webpack_require__("./src/components/sfc-form-row-field.tsx"), exports);
-tslib_1.__exportStar(__webpack_require__("./src/components/sfc-form-row-field-select.tsx"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/components/sfc-table.tsx"), exports);
-
-
-/***/ }),
-
-/***/ "./src/components/sfc-form-row-field-select.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__("./node_modules/react/react.js");
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var form_row_field_select_styles_1 = __webpack_require__("./src/styles/form-row-field-select-styles.ts");
-exports.SFCFormRowFieldSelect = function (props) {
-    var _a = props.properties, options = _a.options, htmlId = _a.htmlId;
-    var selectHandler = function (e) {
-        console.log(e);
-    };
-    return (React.createElement("select", { className: no_important_1.css(form_row_field_select_styles_1.default.formSelect), id: htmlId, onBlur: selectHandler }, options.map(function (item, index) {
-        return (React.createElement("option", { key: index, className: no_important_1.css(form_row_field_select_styles_1.default.formOption), value: item.value }, item.label));
-    })));
-};
-
-
-/***/ }),
-
-/***/ "./src/components/sfc-form-row-field-select.usage.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__("./node_modules/react/react.js");
-var components_1 = __webpack_require__("./src/components/index.ts");
-exports.default = function (_a) {
-    var properties = _a.properties;
-    return (React.createElement(components_1.SFCFormRowFieldSelect, { properties: properties }));
-};
-
-
-/***/ }),
-
-/***/ "./src/components/sfc-form-row-field.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__("./node_modules/react/react.js");
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var collections_1 = __webpack_require__("./src/collections/index.ts");
-var form_row_field_styles_1 = __webpack_require__("./src/styles/form-row-field-styles.ts");
-var error_styles_1 = __webpack_require__("./src/styles/error-styles.ts");
-var sfc_form_row_field_select_usage_1 = __webpack_require__("./src/components/sfc-form-row-field-select.usage.tsx");
-exports.SFCFormRowField = function (props) {
-    var _a = props.options, htmlId = _a.htmlId, type = _a.type;
-    var error = (React.createElement("span", { className: no_important_1.css(error_styles_1.default.errorMessage) }, "\u041D\u0435\u0442 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 \u043E \u043F\u043E\u043B\u0435"));
-    var fieldHandler = function (e) {
-        console.log(e);
-    };
-    switch (type) {
-        case 'text':
-            return (React.createElement("input", { type: type, className: no_important_1.css(form_row_field_styles_1.default.formInput), name: htmlId, id: htmlId, onBlur: fieldHandler }));
-        case 'select':
-            var getOptions = function (id) {
-                switch (id) {
-                    case 'active': return collections_1.SelectActiveCollection;
-                    case 'role': return collections_1.SelectRoleCollection;
-                    default: return [];
-                }
-            };
-            var options = getOptions(htmlId);
-            if (options.length != 0) {
-                var properties = { options: options, htmlId: htmlId, };
-                return (React.createElement(sfc_form_row_field_select_usage_1.default, { properties: properties }));
-            }
-            else {
-                return error;
-            }
-        default: return error;
-    }
-};
+tslib_1.__exportStar(__webpack_require__("./src/components/sfc-table-head.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/components/sfc-table-body.tsx"), exports);
 
 
 /***/ }),
@@ -28590,16 +28694,265 @@ exports.SFCFormRowField = function (props) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var form_row_styles_1 = __webpack_require__("./src/styles/form-row-styles.ts");
-var sfc_form_row_field_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-row-field-connected.usage.tsx");
+var form_styles_1 = __webpack_require__("./src/styles/form-styles.ts");
+var error_styles_1 = __webpack_require__("./src/styles/error-styles.ts");
 exports.SFCFormRow = function (props) {
-    var _a = props.items, htmlId = _a.htmlId, label = _a.label, type = _a.type, regExpTemplate = _a.regExpTemplate, hint = _a.hint;
-    var fieldOptions = { htmlId: htmlId, type: type };
-    console.log(hint);
-    console.log(regExpTemplate);
-    return (React.createElement("div", { className: no_important_1.css(form_row_styles_1.default.formRow) },
-        React.createElement("label", { htmlFor: htmlId, className: no_important_1.css(form_row_styles_1.default.formLabel) }, label),
-        React.createElement(sfc_form_row_field_connected_usage_1.default, { options: fieldOptions })));
+    var _a = props.items, id = _a.id, label = _a.label, type = _a.type, hint = _a.hint, regExpTemplate = _a.regExpTemplate;
+    var addValueInDynamicCollection = props.addValueInDynamicCollection;
+    var _b = props.formRowsDynamicCollection, value = _b.value, isCorrect = _b.isCorrect;
+    var getError = function () { return (React.createElement("span", { className: no_important_1.css(error_styles_1.default.errorMessage) }, "\u041E\u0448\u0438\u0431\u043A\u0430! \u041D\u0435\u0442 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 \u043E \u043F\u043E\u043B\u0435.")); };
+    var getCurrentStyle = function () {
+        switch (isCorrect) {
+            case true: return form_styles_1.default.formInputGreen;
+            case false: return form_styles_1.default.formInputRed;
+            default: return form_styles_1.default.formInputDefault;
+        }
+    };
+    var getInput = function () {
+        return (React.createElement("input", { type: 'text', className: no_important_1.css(form_styles_1.default.formInput, getCurrentStyle()), name: id, id: id, onChange: updateValueHandler, onBlur: fieldHandler, value: value }));
+    };
+    var getSelect = function () {
+        var selectOptions = props.items.selectOptions;
+        if (selectOptions !== undefined && selectOptions.length != 0) {
+            return (React.createElement("select", { onChange: updateValueHandler, value: value, className: no_important_1.css(form_styles_1.default.formSelect, getCurrentStyle()), id: id, onBlur: fieldHandler }, selectOptions.map(function (item, index) {
+                return (React.createElement("option", { key: index, className: no_important_1.css(form_styles_1.default.formOption), value: item.value }, item.label));
+            })));
+        }
+        else {
+            return getError();
+        }
+    };
+    var getFormElement = function () {
+        switch (type) {
+            case 'text': return getInput();
+            case 'select': return getSelect();
+            default: return getError();
+        }
+    };
+    var getHint = function () {
+        if (isCorrect === false) {
+            return React.createElement("span", { className: no_important_1.css(form_styles_1.default.formHint) }, hint);
+        }
+        else {
+            return null;
+        }
+    };
+    var updateValueHandler = function (e) {
+        e.preventDefault();
+        addValueInDynamicCollection({
+            id: id,
+            value: e.currentTarget.value,
+            isCorrect: undefined,
+        });
+    };
+    var fieldHandler = function (e) {
+        e.preventDefault();
+        if (regExpTemplate.test(e.target.value)) {
+            addValueInDynamicCollection({
+                id: id,
+                value: e.target.value,
+                isCorrect: true,
+            });
+        }
+        else {
+            addValueInDynamicCollection({
+                id: id,
+                value: e.target.value,
+                isCorrect: false,
+            });
+        }
+    };
+    return (React.createElement("div", { className: no_important_1.css(form_styles_1.default.formRow) },
+        React.createElement("label", { htmlFor: id, className: no_important_1.css(form_styles_1.default.formLabel) }, label),
+        getFormElement(),
+        getHint()));
+};
+
+
+/***/ }),
+
+/***/ "./src/components/sfc-form.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
+var sfc_form_row_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-row-connected.usage.tsx");
+var form_styles_1 = __webpack_require__("./src/styles/form-styles.ts");
+var error_styles_1 = __webpack_require__("./src/styles/error-styles.ts");
+exports.SFCForm = function (props) {
+    var formRowsStaticCollection = props.formRowsStaticCollection;
+    var formButtonHandler = function (e) {
+        e.preventDefault();
+        var clearDynamicCollection = props.clearDynamicCollection, formRowsDynamicCollection = props.formRowsDynamicCollection, addValueInDynamicCollection = props.addValueInDynamicCollection, addFilledFieldsInUserCollection = props.addFilledFieldsInUserCollection;
+        var valid = true;
+        for (var i in formRowsDynamicCollection) {
+            if (i !== 'active') {
+                if (formRowsDynamicCollection[i].isCorrect === undefined) {
+                    valid = false;
+                    addValueInDynamicCollection({
+                        id: i,
+                        value: '',
+                        isCorrect: false,
+                    });
+                }
+                else if (formRowsDynamicCollection[i].isCorrect === false) {
+                    valid = false;
+                }
+            }
+            else {
+                if (formRowsDynamicCollection['active'].isCorrect === undefined) {
+                    addValueInDynamicCollection({
+                        id: 'active',
+                        value: '1',
+                        isCorrect: true,
+                    });
+                }
+            }
+        }
+        if (valid) {
+            addFilledFieldsInUserCollection(formRowsDynamicCollection);
+            clearDynamicCollection();
+        }
+    };
+    if (formRowsStaticCollection.length != 0) {
+        return (React.createElement("form", { action: '' },
+            formRowsStaticCollection.map(function (item) {
+                return (React.createElement(sfc_form_row_connected_usage_1.default, { key: item.id, formRow: item }));
+            }),
+            React.createElement("div", { className: no_important_1.css(form_styles_1.default.formButtonWrapper) },
+                React.createElement("button", { className: no_important_1.css(form_styles_1.default.formButton), onClick: formButtonHandler }, 'Добавить'))));
+    }
+    else {
+        return (React.createElement("span", { className: no_important_1.css(error_styles_1.default.errorMessage) }, "\u041E\u0448\u0438\u0431\u043A\u0430! \u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043F\u043E\u043B\u044F \u0444\u043E\u0440\u043C\u044B."));
+    }
+};
+
+
+/***/ }),
+
+/***/ "./src/components/sfc-table-body.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
+var table_styles_1 = __webpack_require__("./src/styles/table-styles.ts");
+exports.SFCTableBody = function (props) {
+    var user = props.user;
+    var getRoleStringFromNumber = function (index) {
+        var role = props.selectOptionsCollection.role;
+        for (var i in role) {
+            if (role[i].value == String(index)) {
+                return role[i].label;
+            }
+        }
+        return '';
+    };
+    var getStringFromBoolean = function (b) {
+        var active = props.selectOptionsCollection.active;
+        var key = '0';
+        if (b) {
+            key = '1';
+        }
+        for (var i in active) {
+            if (active[i].value == key) {
+                return active[i].label;
+            }
+        }
+        return '';
+    };
+    var getDate = function (timestamp) {
+        var date = new Date(timestamp);
+        var out = '';
+        var month = String(date.getMonth());
+        var minutes = String(date.getMinutes());
+        out += String(date.getDate()) + '.';
+        out += (month.length < 2) ? '0' + month + '.' : month + '.';
+        out += String(date.getFullYear()) + ' - ';
+        out += String(date.getHours()) + ':';
+        out += (minutes.length < 2) ? '0' + minutes : minutes;
+        return out;
+    };
+    return (React.createElement("tr", null,
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, getRoleStringFromNumber(user.role)),
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, user.login),
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, user.last_name + ' ' + user.first_name),
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell, table_styles_1.default.center) }, user.age),
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, getDate(user.registered_on)),
+        React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell, table_styles_1.default.center) }, getStringFromBoolean(user.active))));
+};
+
+
+/***/ }),
+
+/***/ "./src/components/sfc-table-head.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
+var table_styles_1 = __webpack_require__("./src/styles/table-styles.ts");
+exports.SFCTableHead = function (props) {
+    var tableHeadCollection = props.tableHeadCollection, userCollectionLength = props.userCollectionLength, sortingParams = props.sortingParams, addSortingParams = props.addSortingParams;
+    var getFieldName = function (a) {
+        switch (a) {
+            case 'full name': return 'last_name';
+            case 'registered on': return 'registered_on';
+            default: return a;
+        }
+    };
+    var handlerUp = function (e) {
+        e.preventDefault();
+        addSortingParams({
+            field: getFieldName(e.currentTarget.parentNode.textContent.toLowerCase()),
+            direction: false,
+        });
+    };
+    var handlerDown = function (e) {
+        e.preventDefault();
+        addSortingParams({
+            field: getFieldName(e.currentTarget.parentNode.textContent.toLowerCase()),
+            direction: true,
+        });
+    };
+    var sortArrowActive = function (item, direction) {
+        if (direction === sortingParams.direction) {
+            if (getFieldName(item.toLowerCase()) === sortingParams.field) {
+                return (direction)
+                    ? table_styles_1.default.tableSortDownActive
+                    : table_styles_1.default.tableSortUpActive;
+            }
+            return null;
+        }
+        return null;
+    };
+    if (userCollectionLength > 1) {
+        return (React.createElement("tr", null, tableHeadCollection.map(function (item, index) {
+            if (item !== 'Active') {
+                return (React.createElement("td", { key: index, className: no_important_1.css(table_styles_1.default.tableCell, table_styles_1.default[getFieldName(item.toLowerCase())], table_styles_1.default.tableHeadCell) },
+                    item,
+                    React.createElement("a", { href: "", onClick: handlerUp },
+                        React.createElement("span", { className: no_important_1.css(table_styles_1.default.tableSortUp, sortArrowActive(item, false)) })),
+                    React.createElement("a", { href: "", onClick: handlerDown },
+                        React.createElement("span", { className: no_important_1.css(table_styles_1.default.tableSortDown, sortArrowActive(item, true)) }))));
+            }
+            else {
+                return (React.createElement("td", { key: index, className: no_important_1.css(table_styles_1.default.tableCell, table_styles_1.default[getFieldName(item.toLowerCase())], table_styles_1.default.center) }, item));
+            }
+        })));
+    }
+    else {
+        return (React.createElement("tr", null, tableHeadCollection.map(function (item, index) {
+            return (React.createElement("td", { key: index, className: no_important_1.css(table_styles_1.default.tableCell, table_styles_1.default[getFieldName(item.toLowerCase())]) }, item));
+        })));
+    }
 };
 
 
@@ -28614,92 +28967,99 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
 var table_styles_1 = __webpack_require__("./src/styles/table-styles.ts");
+var sfc_table_head_connected_usage_1 = __webpack_require__("./src/connected/sfc-table-head-connected.usage.tsx");
+var sfc_table_body_connected_usage_1 = __webpack_require__("./src/connected/sfc-table-body-connected.usage.tsx");
 exports.SFCTable = function (props) {
-    var tableHead = props.tableHead;
-    return (React.createElement("table", { className: no_important_1.css(table_styles_1.default.table) },
-        React.createElement("thead", null,
-            React.createElement("tr", null, tableHead.map(function (item, index) { return (React.createElement("td", { key: index, className: no_important_1.css(table_styles_1.default.tableCell) }, item)); }))),
-        React.createElement("tbody", null,
-            React.createElement("tr", null,
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "Administrator"),
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "login"),
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "Petr Ivanov"),
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "32"),
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "12.10.2017 - 10:32"),
-                React.createElement("td", { className: no_important_1.css(table_styles_1.default.tableCell) }, "Yes")))));
-};
-
-
-/***/ }),
-
-/***/ "./src/components/sfc-table.usage.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__("./node_modules/react/react.js");
-var components_1 = __webpack_require__("./src/components/index.ts");
-var models_1 = __webpack_require__("./src/models/index.ts");
-exports.default = function () { return (React.createElement(components_1.SFCTable, { tableHead: models_1.TableHead })); };
-
-
-/***/ }),
-
-/***/ "./src/components/stateful-form.tsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
-var React = __webpack_require__("./node_modules/react/react.js");
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var sfc_form_row_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-row-connected.usage.tsx");
-var form_styles_1 = __webpack_require__("./src/styles/form-styles.ts");
-var error_styles_1 = __webpack_require__("./src/styles/error-styles.ts");
-exports.StatefulForm = (_a = (function (_super) {
-        tslib_1.__extends(class_1, _super);
-        function class_1() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.state = {
-                formRowsCollection: _this.props.initialFormRowsCollection,
-            };
-            _this.formButtonHandler = function (e) {
-                console.log(new Date());
-                e.preventDefault();
-            };
-            return _this;
-        }
-        class_1.prototype.componentWillReceiveProps = function (_a) {
-            var initialFormRowsCollection = _a.initialFormRowsCollection;
-            if (initialFormRowsCollection != null
-                && initialFormRowsCollection !== this.props.initialFormRowsCollection) {
-                this.setState({ formRowsCollection: initialFormRowsCollection });
-            }
-        };
-        class_1.prototype.render = function () {
-            var formButtonHandler = this.formButtonHandler;
-            var formRowsCollection = this.state.formRowsCollection;
-            if (formRowsCollection.length != 0) {
-                return (React.createElement("form", { action: "" },
-                    formRowsCollection.map(function (item, index) {
-                        return React.createElement(sfc_form_row_connected_usage_1.default, { key: index, formRow: item });
-                    }),
-                    React.createElement("div", { className: no_important_1.css(form_styles_1.default.formButtonWrapper) },
-                        React.createElement("button", { className: no_important_1.css(form_styles_1.default.formButton), onClick: formButtonHandler }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C"))));
+    var userCollection = props.userCollection, userCollectionLength = props.userCollectionLength, sortingParams = props.sortingParams;
+    var booleanComparison = function (a, b) {
+        if (b)
+            return a;
+        else
+            return true;
+    };
+    var numberComparison = function (a, b) {
+        if (a < b)
+            return true;
+        else
+            return false;
+    };
+    var stringComparison = function (a, b) {
+        var endOfWhile = (a.length < b.length) ? a.length : b.length;
+        var i = 0;
+        while (i < endOfWhile) {
+            if (a[i] === b[i]) {
+                i++;
             }
             else {
-                return (React.createElement("span", { className: no_important_1.css(error_styles_1.default.errorMessage) }, "\u041E\u0448\u0438\u0431\u043A\u0430! \u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043F\u043E\u043B\u044F \u0444\u043E\u0440\u043C\u044B."));
+                if (a[i] < b[i])
+                    return true;
+                else {
+                    return false;
+                }
             }
-        };
-        return class_1;
-    }(React.Component)),
-    _a.defaultProps = {
-        initialFormRowsCollection: [],
-    },
-    _a);
-var _a;
+        }
+        if (a.length < b.length || a.length == b.length)
+            return true;
+        else
+            return false;
+    };
+    var doSort = function (userCollection, sortingParams, type) {
+        var field = sortingParams.field, direction = sortingParams.direction;
+        var newUserCollection = userCollection;
+        var i = 0;
+        var length = newUserCollection.length - 1;
+        var fieldType = '';
+        if (length > 0) {
+            if (type !== 'boolean') {
+                fieldType = typeof (newUserCollection[i][field]);
+            }
+            else {
+                fieldType = 'boolean';
+            }
+            while (i < length) {
+                var j = i + 1;
+                var getCurrentDirection = function (a, b, type) {
+                    switch (type) {
+                        case 'number': return numberComparison(a, b);
+                        case 'boolean': return booleanComparison(a, b);
+                        default: return stringComparison(a, b);
+                    }
+                };
+                var currentDirection = getCurrentDirection(newUserCollection[i][field], newUserCollection[j][field], fieldType);
+                if (currentDirection == direction) {
+                    i++;
+                }
+                else {
+                    if (newUserCollection[i][field] != newUserCollection[j][field]) {
+                        var tmp = newUserCollection[j];
+                        newUserCollection[j] = newUserCollection[i];
+                        newUserCollection[i] = tmp;
+                        if (i != 0) {
+                            i--;
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+                    else {
+                        i++;
+                    }
+                }
+            }
+        }
+        return newUserCollection;
+    };
+    var sortedUserCollection = doSort(doSort(userCollection, sortingParams), { field: 'active', direction: true }, 'boolean');
+    if (userCollectionLength !== 0) {
+        return (React.createElement("table", { className: no_important_1.css(table_styles_1.default.table) },
+            React.createElement("thead", null,
+                React.createElement(sfc_table_head_connected_usage_1.default, null)),
+            React.createElement("tbody", null, sortedUserCollection.map(function (user, index) { return (React.createElement(sfc_table_body_connected_usage_1.default, { key: index, user: user })); }))));
+    }
+    else {
+        return null;
+    }
+};
 
 
 /***/ }),
@@ -28711,9 +29071,51 @@ var _a;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
-tslib_1.__exportStar(__webpack_require__("./src/connected/stateful-form-connected.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-connected.tsx"), exports);
 tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-connected.tsx"), exports);
-tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-field-connected.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-table-connected.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-table-head-connected.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-table-body-connected.tsx"), exports);
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-form-connected.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
+var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var form_1 = __webpack_require__("./src/redux/form/index.ts");
+var table_1 = __webpack_require__("./src/redux/table/index.ts");
+var selectors_1 = __webpack_require__("./src/selectors/index.ts");
+var components_1 = __webpack_require__("./src/components/index.ts");
+var mapStateToProps = reselect_1.createStructuredSelector({
+    formRowsStaticCollection: selectors_1.formRowsStaticCollectionSelector,
+    formRowsDynamicCollection: selectors_1.formRowsDynamicCollectionFormSelector,
+});
+var mapDispatchToProps = function (dispatch) { return redux_1.bindActionCreators({
+    addFilledFieldsInUserCollection: table_1.actionCreators.addFilledFieldsInUserCollection,
+    addValueInDynamicCollection: form_1.actionCreators.addValueInDynamicCollection,
+    clearDynamicCollection: form_1.actionCreators.clearDynamicCollection,
+}, dispatch); };
+exports.SFCFormConnected = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(components_1.SFCForm);
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-form-connected.usage.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var connected_1 = __webpack_require__("./src/connected/index.ts");
+exports.default = function () { return (React.createElement(connected_1.SFCFormConnected, null)); };
 
 
 /***/ }),
@@ -28724,10 +29126,19 @@ tslib_1.__exportStar(__webpack_require__("./src/connected/sfc-form-row-field-con
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
 var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var form_1 = __webpack_require__("./src/redux/form/index.ts");
+var selectors_1 = __webpack_require__("./src/selectors/index.ts");
 var components_1 = __webpack_require__("./src/components/index.ts");
-var mapStateToProps = function (state) { return ({}); };
-exports.SFCFormRowConnected = react_redux_1.connect(mapStateToProps, {})(components_1.SFCFormRow);
+var mapStateToProps = reselect_1.createStructuredSelector({
+    formRowsDynamicCollection: selectors_1.formRowsDynamicCollectionSelector,
+});
+var mapDispatchToProps = function (dispatch) { return redux_1.bindActionCreators({
+    addValueInDynamicCollection: form_1.actionCreators.addValueInDynamicCollection,
+}, dispatch); };
+exports.SFCFormRowConnected = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(components_1.SFCFormRow);
 
 
 /***/ }),
@@ -28748,21 +29159,25 @@ exports.default = function (_a) {
 
 /***/ }),
 
-/***/ "./src/connected/sfc-form-row-field-connected.tsx":
+/***/ "./src/connected/sfc-table-body-connected.tsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var selectors_1 = __webpack_require__("./src/selectors/index.ts");
 var components_1 = __webpack_require__("./src/components/index.ts");
-var mapStateToProps = function (state) { return ({}); };
-exports.SFCFormRowFieldConnected = react_redux_1.connect(mapStateToProps, {})(components_1.SFCFormRowField);
+var mapStateToProps = reselect_1.createStructuredSelector({
+    selectOptionsCollection: selectors_1.selectOptionsCollectionSelector,
+});
+exports.SFCTableBodyConnected = react_redux_1.connect(mapStateToProps, {})(components_1.SFCTableBody);
 
 
 /***/ }),
 
-/***/ "./src/connected/sfc-form-row-field-connected.usage.tsx":
+/***/ "./src/connected/sfc-table-body-connected.usage.tsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28771,28 +29186,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var connected_1 = __webpack_require__("./src/connected/index.ts");
 exports.default = function (_a) {
-    var options = _a.options;
-    return (React.createElement(connected_1.SFCFormRowFieldConnected, { options: options }));
+    var user = _a.user;
+    return (React.createElement(connected_1.SFCTableBodyConnected, { user: user }));
 };
 
 
 /***/ }),
 
-/***/ "./src/connected/stateful-form-connected.tsx":
+/***/ "./src/connected/sfc-table-connected.tsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var selectors_1 = __webpack_require__("./src/selectors/index.ts");
 var components_1 = __webpack_require__("./src/components/index.ts");
-var mapStateToProps = function (state, ownProps) { return ({}); };
-exports.StatefulFormConnected = react_redux_1.connect(mapStateToProps, {})(components_1.StatefulForm);
+var mapStateToProps = reselect_1.createStructuredSelector({
+    userCollection: selectors_1.userCollectionSelector,
+    userCollectionLength: selectors_1.userCollectionLengthSelector,
+    sortingParams: selectors_1.sortingParamsSelector,
+});
+exports.SFCTableConnected = react_redux_1.connect(mapStateToProps, {})(components_1.SFCTable);
 
 
 /***/ }),
 
-/***/ "./src/connected/stateful-form-connected.usage.tsx":
+/***/ "./src/connected/sfc-table-connected.usage.tsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28800,8 +29221,45 @@ exports.StatefulFormConnected = react_redux_1.connect(mapStateToProps, {})(compo
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var connected_1 = __webpack_require__("./src/connected/index.ts");
-var collections_1 = __webpack_require__("./src/collections/index.ts");
-exports.default = function () { return (React.createElement(connected_1.StatefulFormConnected, { initialFormRowsCollection: collections_1.FormRowsCollection })); };
+exports.default = function () { return (React.createElement(connected_1.SFCTableConnected, null)); };
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-table-head-connected.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
+var react_redux_1 = __webpack_require__("./node_modules/react-redux/es/index.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var table_1 = __webpack_require__("./src/redux/table/index.ts");
+var selectors_1 = __webpack_require__("./src/selectors/index.ts");
+var components_1 = __webpack_require__("./src/components/index.ts");
+var mapStateToProps = reselect_1.createStructuredSelector({
+    tableHeadCollection: selectors_1.tableHeadCollectionSelector,
+    userCollectionLength: selectors_1.userCollectionLengthSelector,
+    sortingParams: selectors_1.sortingParamsSelector,
+});
+var mapDispatchToProps = function (dispatch) { return redux_1.bindActionCreators({
+    addSortingParams: table_1.actionCreators.addSortingParams,
+}, dispatch); };
+exports.SFCTableHeadConnected = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(components_1.SFCTableHead);
+
+
+/***/ }),
+
+/***/ "./src/connected/sfc-table-head-connected.usage.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__("./node_modules/react/react.js");
+var connected_1 = __webpack_require__("./src/connected/index.ts");
+exports.default = function () { return (React.createElement(connected_1.SFCTableHeadConnected, null)); };
 
 
 /***/ }),
@@ -28814,13 +29272,13 @@ exports.default = function () { return (React.createElement(connected_1.Stateful
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__("./node_modules/react/react.js");
 var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var stateful_form_connected_usage_1 = __webpack_require__("./src/connected/stateful-form-connected.usage.tsx");
-var sfc_table_usage_1 = __webpack_require__("./src/components/sfc-table.usage.tsx");
+var sfc_form_connected_usage_1 = __webpack_require__("./src/connected/sfc-form-connected.usage.tsx");
+var sfc_table_connected_usage_1 = __webpack_require__("./src/connected/sfc-table-connected.usage.tsx");
 var app_styles_1 = __webpack_require__("./src/styles/app-styles.ts");
 exports.App = function () {
     return (React.createElement("div", { className: no_important_1.css(app_styles_1.default.wrapper) },
-        React.createElement(stateful_form_connected_usage_1.default, null),
-        React.createElement(sfc_table_usage_1.default, null)));
+        React.createElement(sfc_form_connected_usage_1.default, null),
+        React.createElement(sfc_table_connected_usage_1.default, null)));
 };
 
 
@@ -28856,50 +29314,20 @@ react_dom_1.render(Root, document.getElementById('app'));
 
 /***/ }),
 
-/***/ "./src/models/index.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
-tslib_1.__exportStar(__webpack_require__("./src/models/table-head-model.ts"), exports);
-
-
-/***/ }),
-
-/***/ "./src/models/table-head-model.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TableHead = [
-    'Role',
-    'Login',
-    'Full name',
-    'Age',
-    'Registered on',
-    'Active',
-];
-
-
-/***/ }),
-
 /***/ "./src/redux/form/actions.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TEST_TYPE1 = 'TEST_TYPE1';
-exports.TEST_TYPE2 = 'TEST_TYPE2';
+exports.ADD_VALUE_IN_DYNAMIC_COLLECTION = 'ADD_VALUE_IN_DYNAMIC_COLLECTION';
+exports.CLEAR_DYNAMIC_COLLECTION = 'CLEAR_DYNAMIC_COLLECTION';
 exports.actionCreators = {
-    firstTestSfc: function () { return ({
-        type: exports.TEST_TYPE1,
+    addValueInDynamicCollection: function (payload) { return ({
+        type: exports.ADD_VALUE_IN_DYNAMIC_COLLECTION, payload: payload,
     }); },
-    secondTestSfc: function () { return ({
-        type: exports.TEST_TYPE2,
+    clearDynamicCollection: function () { return ({
+        type: exports.CLEAR_DYNAMIC_COLLECTION,
     }); },
 };
 
@@ -28925,14 +29353,29 @@ tslib_1.__exportStar(__webpack_require__("./src/redux/form/reducer.ts"), exports
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
 var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
+var collections_1 = __webpack_require__("./src/collections/index.ts");
+var _1 = __webpack_require__("./src/redux/form/index.ts");
 exports.reducer = redux_1.combineReducers({
-    formRowsCollection: function (state, action) {
-        if (state === void 0) { state = []; }
+    formRowsStaticCollection: function (state, action) {
+        if (state === void 0) { state = collections_1.FormRowsCollection; }
+        return state;
+    },
+    formRowsDynamicCollection: function (state, action) {
+        if (state === void 0) { state = collections_1.FormRowsDynamicCollection; }
         switch (action.type) {
+            case _1.ADD_VALUE_IN_DYNAMIC_COLLECTION:
+                return tslib_1.__assign({}, state, (_a = {}, _a[action.payload.id] = {
+                    value: action.payload.value,
+                    isCorrect: action.payload.isCorrect,
+                }, _a));
+            case _1.CLEAR_DYNAMIC_COLLECTION:
+                return tslib_1.__assign({}, collections_1.FormRowsDynamicCollection);
             default:
                 return state;
         }
+        var _a;
     },
 });
 
@@ -28960,9 +29403,185 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
 var react_router_redux_1 = __webpack_require__("./node_modules/react-router-redux/lib/index.js");
 var form_1 = __webpack_require__("./src/redux/form/index.ts");
+var table_1 = __webpack_require__("./src/redux/table/index.ts");
 exports.rootReducer = redux_1.combineReducers({
     router: react_router_redux_1.routerReducer,
     form: form_1.reducer,
+    table: table_1.reducer,
+});
+
+
+/***/ }),
+
+/***/ "./src/redux/table/actions.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADD_FILLED_FIELDS_IN_USER_COLLECTION = 'ADD_FILLED_FIELDS_IN_USER_COLLECTION';
+exports.ADD_SORTING_PARAMS = 'ADD_SORTING_PARAMS';
+exports.actionCreators = {
+    addFilledFieldsInUserCollection: function (payload) { return ({
+        type: exports.ADD_FILLED_FIELDS_IN_USER_COLLECTION, payload: payload,
+    }); },
+    addSortingParams: function (payload) { return ({
+        type: exports.ADD_SORTING_PARAMS, payload: payload,
+    }); },
+};
+
+
+/***/ }),
+
+/***/ "./src/redux/table/index.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+tslib_1.__exportStar(__webpack_require__("./src/redux/table/actions.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/redux/table/reducer.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/redux/table/reducer.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
+var collections_1 = __webpack_require__("./src/collections/index.ts");
+var _1 = __webpack_require__("./src/redux/table/index.ts");
+exports.reducer = redux_1.combineReducers({
+    tableHeadCollection: function (state) {
+        if (state === void 0) { state = collections_1.TableHeadCollection; }
+        return state;
+    },
+    roleSelectCollection: function (state) {
+        if (state === void 0) { state = collections_1.RoleSelectOptions; }
+        return state;
+    },
+    activeSelectCollection: function (state) {
+        if (state === void 0) { state = collections_1.ActiveSelectOptions; }
+        return state;
+    },
+    userCollection: function (state, action) {
+        if (state === void 0) { state = []; }
+        switch (action.type) {
+            case _1.ADD_FILLED_FIELDS_IN_USER_COLLECTION:
+                var typingPayload = function (payload) {
+                    return {
+                        first_name: payload['first_name'].value,
+                        last_name: payload['last_name'].value,
+                        active: (payload['active'].value == '1') ? true : false,
+                        age: Number(payload['age'].value),
+                        login: payload['login'].value,
+                        password: payload['password'].value,
+                        role: Number(payload['role'].value),
+                        registered_on: new Date().valueOf(),
+                    };
+                };
+                return state.concat([
+                    typingPayload(action.payload),
+                ]);
+            default:
+                return state;
+        }
+    },
+    sortingParams: function (state, action) {
+        if (state === void 0) { state = { field: 'login', direction: true }; }
+        switch (action.type) {
+            case _1.ADD_SORTING_PARAMS:
+                return tslib_1.__assign({}, action.payload);
+            default:
+                return state;
+        }
+    },
+});
+
+
+/***/ }),
+
+/***/ "./src/selectors/index.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+tslib_1.__exportStar(__webpack_require__("./src/selectors/sfc-table-selectors.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/selectors/sfc-form-row-selectors.tsx"), exports);
+tslib_1.__exportStar(__webpack_require__("./src/selectors/sfc-form-selectors.tsx"), exports);
+
+
+/***/ }),
+
+/***/ "./src/selectors/sfc-form-row-selectors.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var formRowsDynamicCollection = function (state, ownProps) { return (state.form.formRowsDynamicCollection[ownProps.items.id]); };
+exports.formRowsDynamicCollectionSelector = reselect_1.createSelector([formRowsDynamicCollection], function (formRowsDynamicCollection) { return formRowsDynamicCollection; });
+
+
+/***/ }),
+
+/***/ "./src/selectors/sfc-form-selectors.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var formRowsStaticCollection = function (state) { return (state.form.formRowsStaticCollection); };
+var formRowsDynamicCollection = function (state) { return (state.form.formRowsDynamicCollection); };
+exports.formRowsDynamicCollectionFormSelector = reselect_1.createSelector([formRowsDynamicCollection], function (formRowsDynamicCollection) { return formRowsDynamicCollection; });
+exports.formRowsStaticCollectionSelector = reselect_1.createSelector([formRowsStaticCollection], function (formRowsStaticCollection) { return formRowsStaticCollection; });
+
+
+/***/ }),
+
+/***/ "./src/selectors/sfc-table-selectors.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+var reselect_1 = __webpack_require__("./node_modules/reselect/lib/index.js");
+var tableHeadCollection = function (state) { return state.table.tableHeadCollection; };
+var userCollection = function (state) { return state.table.userCollection; };
+var roleSelectCollection = function (state) { return state.table.roleSelectCollection; };
+var activeSelectCollection = function (state) { return state.table.activeSelectCollection; };
+var sortingParams = function (state) { return state.table.sortingParams; };
+exports.sortingParamsSelector = reselect_1.createSelector([sortingParams], function (sortingParams) { return sortingParams; });
+exports.tableHeadCollectionSelector = reselect_1.createSelector([tableHeadCollection], function (tableHeadCollection) { return tableHeadCollection; });
+exports.userCollectionSelector = reselect_1.createSelector([userCollection], function (userCollection) { return userCollection; });
+exports.userCollectionLengthSelector = reselect_1.createSelector([userCollection], function (userCollection) { return userCollection.length; });
+exports.selectOptionsCollectionSelector = reselect_1.createSelector([roleSelectCollection, activeSelectCollection], function (roleSelectCollection, activeSelectCollection) {
+    var role = {};
+    var active = {};
+    for (var i in roleSelectCollection) {
+        role = tslib_1.__assign({}, role, (_a = {}, _a[i] = {
+            value: roleSelectCollection[i].value,
+            label: roleSelectCollection[i].label,
+        }, _a));
+    }
+    for (var i in activeSelectCollection) {
+        active = tslib_1.__assign({}, active, (_b = {}, _b[i] = {
+            value: activeSelectCollection[i].value,
+            label: activeSelectCollection[i].label,
+        }, _b));
+    }
+    return { role: role, active: active };
+    var _a, _b;
 });
 
 
@@ -28975,9 +29594,10 @@ exports.rootReducer = redux_1.combineReducers({
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__("./node_modules/redux/es/index.js");
+var redux_devtools_extension_1 = __webpack_require__("./node_modules/redux-devtools-extension/index.js");
 var redux_2 = __webpack_require__("./src/redux/index.ts");
 function confugureStore(initialState) {
-    return redux_1.createStore(redux_2.rootReducer, initialState);
+    return redux_1.createStore(redux_2.rootReducer, initialState, redux_devtools_extension_1.composeWithDevTools());
 }
 var store = confugureStore();
 exports.default = store;
@@ -29021,57 +29641,7 @@ exports.default = errors;
 
 /***/ }),
 
-/***/ "./src/styles/form-row-field-select-styles.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var styles = no_important_1.StyleSheet.create({
-    formSelect: {
-        fontSize: '16px',
-        height: '30px',
-        border: '#ccc 1px solid',
-    },
-    formOption: {
-        fontSize: '16px',
-    },
-});
-exports.default = styles;
-
-
-/***/ }),
-
-/***/ "./src/styles/form-row-field-styles.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var styles = no_important_1.StyleSheet.create({
-    formInput: {
-        boxSizing: 'border-box',
-        width: '200px',
-        height: '30px',
-        fontSize: '16px',
-        padding: '0 2px',
-        border: '#ccc 1px solid',
-    },
-    formInputGreen: {
-        border: 'green 1px solid',
-    },
-    formInputRed: {
-        border: 'red 1px solid',
-    },
-});
-exports.default = styles;
-
-
-/***/ }),
-
-/***/ "./src/styles/form-row-styles.ts":
+/***/ "./src/styles/form-styles.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29093,30 +29663,39 @@ var styles = no_important_1.StyleSheet.create({
         height: '30px',
         lineHeight: '30px',
     },
+    formHintVisible: {
+        display: 'inline-block',
+    },
+    formInput: {
+        boxSizing: 'border-box',
+        width: '200px',
+        height: '30px',
+        fontSize: '16px',
+        padding: '0 2px',
+    },
+    formInputDefault: {
+        border: '#ccc 1px solid',
+    },
+    formInputGreen: {
+        border: 'green 1px solid',
+    },
+    formInputRed: {
+        border: 'red 1px solid',
+    },
     formHint: {
         fontSize: '10px',
         fontStyle: 'italic',
         paddingLeft: '5px',
-        display: 'none',
         color: 'red',
-    },
-    formHintVisible: {
         display: 'inline-block',
-    }
-});
-exports.default = styles;
-
-
-/***/ }),
-
-/***/ "./src/styles/form-styles.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var no_important_1 = __webpack_require__("./node_modules/aphrodite/no-important.js");
-var styles = no_important_1.StyleSheet.create({
+    },
+    formSelect: {
+        fontSize: '16px',
+        height: '30px',
+    },
+    formOption: {
+        fontSize: '16px',
+    },
     formButton: {
         display: 'block',
         width: '200px',
@@ -29162,6 +29741,62 @@ var styles = no_important_1.StyleSheet.create({
         borderCollapse: 'inherit',
         border: '1px solid #ccc',
     },
+    tableHeadCell: {
+        position: 'relative',
+    },
+    tableSortUp: {
+        display: 'inline-block',
+        width: 0,
+        height: 0,
+        borderRight: '6px solid transparent',
+        borderLeft: '6px solid transparent',
+        borderBottom: '12px solid #ccc',
+        ':hover': {
+            borderBottom: '12px solid #999',
+        },
+        position: 'absolute',
+        right: '18px',
+    },
+    tableSortDown: {
+        display: 'inline-block',
+        width: 0,
+        height: 0,
+        borderTop: '12px solid #ccc',
+        borderRight: '6px solid transparent',
+        borderLeft: '6px solid transparent',
+        ':hover': {
+            borderTop: '12px solid #999',
+        },
+        position: 'absolute',
+        right: '5px',
+    },
+    tableSortUpActive: {
+        borderBottom: '12px solid #999',
+    },
+    tableSortDownActive: {
+        borderTop: '12px solid #999',
+    },
+    role: {
+        width: '80px',
+    },
+    login: {
+        width: '120px',
+    },
+    last_name: {
+        width: '120px',
+    },
+    age: {
+        width: '60px',
+    },
+    registered_on: {
+        width: '120px',
+    },
+    active: {
+        width: '40px',
+    },
+    center: {
+        textAlign: 'center',
+    }
 });
 exports.default = styles;
 
