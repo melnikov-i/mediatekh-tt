@@ -10,7 +10,6 @@ import {
   tableHeadCollectionSelector,
   userCollectionLengthSelector,
 } from '@src/selectors';
-
 import { SFCTableHead } from '@src/components';
 
 const mapStateToProps = createStructuredSelector({

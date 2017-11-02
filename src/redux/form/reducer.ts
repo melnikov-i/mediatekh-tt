@@ -41,18 +41,7 @@ export const reducer = combineReducers<State>({
           }
         };
       case CLEAR_DYNAMIC_COLLECTION:
-        let newState: IFormRowsDynamicParamsModel = {...state};
-        for ( let i in newState ) {
-          newState = {
-            ...newState,
-            [i]: {
-              value: '',
-              isCorrect: undefined,
-            }
-          }
-        }
-        console.log('[CLEAR_DYNAMIC_COLLECTION]')
-        return newState;
+        return {...FormRowsDynamicCollection};
       default:
         return state;
     }

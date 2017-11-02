@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import {
   selectOptionsCollectionSelector,
 } from '@src/selectors';
-
 import { SFCTableBody } from '@src/components';
 
 const mapStateToProps = createStructuredSelector({

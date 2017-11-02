@@ -33,17 +33,19 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     sortingParams,
   } = props;
 
+  /* Сравнивание двух булевых значений */
   const booleanComparison = ( a: boolean, b: boolean ): boolean => {
     if ( b ) return a;
     else return true;
   }
 
+  /* Сравнивание двух числовых значений */
   const numberComparison = ( a: number, b: number ): boolean => {
-    console.log('[COMPARISON - NUMBER]');
     if ( a < b ) return true;
     else return false;
   }
 
+  /* Сравнивание двух строковых значений */
   const stringComparison = (a: string, b: string): boolean => {
     const endOfWhile: number = ( a.length < b.length ) ? a.length : b.length;
     let i: number = 0;
@@ -53,7 +55,6 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
       } else {
         if ( a[i] < b[i] ) return true;
         else {
-          console.log('[COMPARISON:]', a[i] > b[i], a[i], b[i]);
           return false;
         }
       }
@@ -62,6 +63,7 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     else return false;
   }
 
+  /* Выполнение сортировки */
   const doSort = 
   ( userCollection: IUser[], sortingParams: ISortingParamsModel, 
   type?: string ): IUser[] => {
@@ -72,7 +74,7 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     let fieldType: string = '';
     if ( length > 0 ) {
       if ( type !== 'boolean' ) {
-        fieldType = typeof(newUserCollection[i][field]);        
+        fieldType = typeof(newUserCollection[i][field]);
       } else {
         fieldType = 'boolean';
       }
@@ -119,7 +121,6 @@ export const SFCTable: React.SFC<SFCTableProps> = (props) => {
     
   
   if ( userCollectionLength !== 0 ) {
-    console.log('[TABLE]');
     return (
       <table className={css(styles.table)}>
         <thead>

@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
 
+/* Импорт интерфейсов */
 import {
   ITableRow,
   ISortingParamsModel,
@@ -18,6 +19,7 @@ export interface SFCTableHeadProps {
 }
 
 
+/* Компонент */
 export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
   const {
     tableHeadCollection,
@@ -45,8 +47,6 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
 
   const handlerDown = (e) => {
     e.preventDefault();
-// console.log(e.currentTarget.parentNode.textContent.toLowerCase());
-// console.log(getFieldName(e.currentTarget.parentNode.textContent.toLowerCase()));
     addSortingParams({
       field: getFieldName(
         e.currentTarget.parentNode.textContent.toLowerCase()),
@@ -56,7 +56,7 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
 
   const sortArrowActive = ( item: string, direction: boolean ) => {
     if ( direction === sortingParams.direction ) {
-      if ( item.toLowerCase() === sortingParams.field ) {
+      if ( getFieldName(item.toLowerCase()) === sortingParams.field ) {
         return ( direction ) 
           ? styles.tableSortDownActive
           : styles.tableSortUpActive;
@@ -65,17 +65,22 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
     } 
     return null;
   }
-
+  
   if ( userCollectionLength > 1 ) {
-    console.log('[TABLE_HEAD]');
     return (
       <tr>
         {
           tableHeadCollection.map((item, index) => {
             if ( item !== 'Active' ) {
               return (
-                <td key={index} className={css(styles.tableCell)}>
-                  {item}
+                <td 
+                  key={index}
+                  className={css(
+                      styles.tableCell,
+                      styles[getFieldName(item.toLowerCase())],
+                      styles.tableHeadCell
+                    )}>
+                    {item}
                   <a href="" onClick={handlerUp}>
                     <span
                       className={css(
@@ -92,7 +97,13 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
               );
             } else {
               return (
-                <td key={index} className={css(styles.tableCell)}>
+                <td
+                  key={index}
+                  className={css(
+                      styles.tableCell,
+                      styles[getFieldName(item.toLowerCase())],
+                      styles.center
+                    )}>
                   {item}
                 </td>
               );
@@ -107,7 +118,12 @@ export const SFCTableHead: React.SFC<SFCTableHeadProps> = (props) => {
         {
           tableHeadCollection.map((item, index) => {
             return (
-              <td key={index} className={css(styles.tableCell)}>
+              <td
+                key={index}
+                className={css(
+                    styles.tableCell,
+                      styles[getFieldName(item.toLowerCase())]
+                  )}>
                 {item}
               </td>
             );

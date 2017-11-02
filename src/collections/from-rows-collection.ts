@@ -94,6 +94,7 @@ const doFormRowsDynamicCollection =
     switch ( FormRowsCollection[i].id ) {
       case 'active': defaultValue = '1'; break;
       case 'role': defaultValue = '0'; break;
+      default: defaultValue = '';
     }
     out = {
       ...out,

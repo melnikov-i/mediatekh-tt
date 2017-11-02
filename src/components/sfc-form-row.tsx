@@ -136,7 +136,7 @@ export const SFCFormRow: React.SFC<SFCFormRowProps> = (props) => {
 
   return (
     <div className={css(styles.formRow)}>
-      {/* Метка поля */console.log('[FORM_FIELD]:', id)}
+      {/* Метка поля */}
       <label
         htmlFor={id}
         className={css(styles.formLabel)}>

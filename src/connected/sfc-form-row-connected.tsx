@@ -4,8 +4,8 @@ import { createStructuredSelector } from 'reselect';
 
 import { Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/form';
-import { SFCFormRow } from '@src/components';
 import { formRowsDynamicCollectionSelector } from '@src/selectors';
+import { SFCFormRow } from '@src/components';
 
 
 const mapStateToProps = createStructuredSelector({

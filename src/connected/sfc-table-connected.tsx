@@ -6,8 +6,8 @@ import {
   userCollectionSelector,
   userCollectionLengthSelector,
 } from '@src/selectors';
-
 import { SFCTable } from '@src/components';
+
 
 const mapStateToProps = createStructuredSelector({
   userCollection: userCollectionSelector,

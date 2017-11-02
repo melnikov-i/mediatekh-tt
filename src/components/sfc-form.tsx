@@ -46,7 +46,6 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
       addFilledFieldsInUserCollection,
     } = props;
 
-
     let valid: boolean = true;
 
     for ( let i in formRowsDynamicCollection ) {
@@ -83,7 +82,6 @@ export const SFCForm: React.SFC<SFCFormProps> = (props) => {
     /* В случае успеха генерирует поля формы */
     return (
       <form action={''}>
-        {console.log('[FORM]')}
         {/* Поля формы */
           formRowsStaticCollection.map((item) => {
             return (

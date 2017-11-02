@@ -23,8 +23,6 @@ export const SFCTableBody: React.SFC<SFCTableBodyProps> = (props) => {
     user,
   } = props;
 
-  console.log('[TABLE_ROW]');
-
   /* Получение роли в виде текста */
   const getRoleStringFromNumber = (index: number): string => {
     const { role } = props.selectOptionsCollection;
@@ -76,13 +74,13 @@ export const SFCTableBody: React.SFC<SFCTableBodyProps> = (props) => {
       <td className={css(styles.tableCell)}>
         {user.last_name + ' ' + user.first_name}
       </td>
-      <td className={css(styles.tableCell)}>
+      <td className={css(styles.tableCell, styles.center)}>
         {user.age}
       </td>
       <td className={css(styles.tableCell)}>
         {getDate(user.registered_on)}
       </td>
-      <td className={css(styles.tableCell)}>
+      <td className={css(styles.tableCell, styles.center)}>
         {getStringFromBoolean(user.active)}
       </td>
     </tr>
